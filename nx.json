@@ -67,6 +67,9 @@
     },
     "background-role-queue": {
       "tags": []
+    },
+    "shared-db": {
+      "tags": []
     }
   }
 }

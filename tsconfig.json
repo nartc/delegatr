@@ -35,7 +35,8 @@
       "@delegatr/shared-config": ["libs/shared-config/src/index.ts"],
       "@delegatr/background-role-queue": [
         "libs/background-role-queue/src/index.ts"
-      ]
+      ],
+      "@delegatr/shared-db": ["libs/shared-db/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,4 +1,4 @@
-import { redisConfiguration } from '@delegatr/shared-config';
+import { dbConfiguration, redisConfiguration } from '@delegatr/shared-config';
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { arenaConfiguration } from './arena.configuration';
@@ -9,7 +9,12 @@ import { sgConfiguration } from './sg.configuration';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [redisConfiguration, arenaConfiguration, sgConfiguration],
+      load: [
+        redisConfiguration,
+        arenaConfiguration,
+        sgConfiguration,
+        dbConfiguration,
+      ],
     }),
   ],
   exports: [ConfigModule],
