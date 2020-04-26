@@ -567,6 +567,61 @@
           }
         }
       }
+    },
+    "api-task-repository": {
+      "root": "libs/api-task-repository",
+      "sourceRoot": "libs/api-task-repository/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/api-task-repository/tsconfig.lib.json",
+              "libs/api-task-repository/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/api-task-repository/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/api-task-repository/jest.config.js",
+            "tsConfig": "libs/api-task-repository/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-assignment-repository": {
+      "root": "libs/api-assignment-repository",
+      "sourceRoot": "libs/api-assignment-repository/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/api-assignment-repository/tsconfig.lib.json",
+              "libs/api-assignment-repository/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/api-assignment-repository/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/api-assignment-repository/jest.config.js",
+            "tsConfig": "libs/api-assignment-repository/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

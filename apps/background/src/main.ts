@@ -3,16 +3,25 @@
  * This is only a minimal backend to get started.
  */
 
-import { queues } from '@delegatr/background-common';
 import { arenaConfiguration } from '@delegatr/background-config';
 import { redisConfiguration } from '@delegatr/shared-config';
-import { Logger } from '@nestjs/common';
+import { getQueueToken } from '@nestjs/bull';
+import { INestApplication, Logger } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { Queue } from 'bull';
+import { setQueues, UI } from 'bull-board';
 import { AppModule } from './app/app.module';
 
-const Arena = require('bull-arena');
+function setupQueueDashboard(app: INestApplication, logger: Logger) {
+  const queues = ['userQueue', 'roleQueue'].map((queueName) =>
+    app.get<Queue>(getQueueToken(queueName))
+  );
+  setQueues(queues);
+  app.use('/admin/bull', UI);
+  logger.debug('Bull Dashboard enabled');
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,19 +34,7 @@ async function bootstrap() {
     arenaConfiguration.KEY
   );
 
-  const arena = Arena(
-    {
-      queues: queues.map((q) => ({
-        name: q.name,
-        hostId: q.name,
-        redis: { host: redisConfig.host, port: redisConfig.port },
-        type: 'bull',
-      })),
-    },
-    arenaConfig
-  );
-  app.use('/arena', arena);
-  logger.debug('Arena Dashboard enabled');
+  setupQueueDashboard(app, logger);
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.REDIS,

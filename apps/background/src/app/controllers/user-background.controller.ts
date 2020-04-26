@@ -10,7 +10,7 @@ import { Queue } from 'bull';
 export class UserBackgroundController {
   constructor(@InjectQueue(userQueueName) private readonly userQueue: Queue) {}
 
-  @MessagePattern({ cmd: UserJob.AddUser })
+  @MessagePattern(UserJob.AddUser)
   addUserBackgroundReceiver(data: User) {
     return this.userQueue.add(UserJob.AddUser, data);
   }

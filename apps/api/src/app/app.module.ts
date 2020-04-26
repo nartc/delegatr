@@ -1,6 +1,8 @@
+import { ApiAssignmentRepositoryModule } from '@delegatr/api-assignment-repository';
 import { ApiAuthModule } from '@delegatr/api-auth';
 import { ApiConfigModule } from '@delegatr/api-config';
 import { ApiRoleRepositoryModule } from '@delegatr/api-role-repository';
+import { ApiTaskRepositoryModule } from '@delegatr/api-task-repository';
 import { ApiUserRepositoryModule } from '@delegatr/api-user-repository';
 import { redisConfiguration, RoleJob } from '@delegatr/shared-config';
 import { SharedDbModule } from '@delegatr/shared-db';
@@ -21,6 +23,8 @@ import { AutomapperModule } from 'nestjsx-automapper';
     ApiAuthModule,
     ApiUserRepositoryModule,
     ApiRoleRepositoryModule,
+    ApiTaskRepositoryModule,
+    ApiAssignmentRepositoryModule,
   ],
   providers: [
     {

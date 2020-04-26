@@ -36,7 +36,13 @@
       "@delegatr/background-role-queue": [
         "libs/background-role-queue/src/index.ts"
       ],
-      "@delegatr/shared-db": ["libs/shared-db/src/index.ts"]
+      "@delegatr/shared-db": ["libs/shared-db/src/index.ts"],
+      "@delegatr/api-task-repository": [
+        "libs/api-task-repository/src/index.ts"
+      ],
+      "@delegatr/api-assignment-repository": [
+        "libs/api-assignment-repository/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

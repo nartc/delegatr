@@ -1,5 +1,5 @@
 import { redisConfiguration } from '@delegatr/shared-config';
-import { BullModuleOptions } from '@nestjs/bull/dist/interfaces/bull-module-options.interface';
+import { BullModuleOptions } from '@nestjs/bull';
 import { ConfigType } from '@nestjs/config';
 
 export const queueDefaultOptions = {
@@ -8,11 +8,6 @@ export const queueDefaultOptions = {
     timeout: 10000,
   },
 };
-
-export const queues = ['userQueue', 'roleQueue', 'emailQueue'].map((queue) => ({
-  name: queue,
-  options: queueDefaultOptions,
-}));
 
 export const queueProviderFactory = (name: string) => (
   redisConfig: ConfigType<typeof redisConfiguration>

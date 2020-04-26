@@ -70,6 +70,12 @@
     },
     "shared-db": {
       "tags": []
+    },
+    "api-task-repository": {
+      "tags": []
+    },
+    "api-assignment-repository": {
+      "tags": []
     }
   }
 }

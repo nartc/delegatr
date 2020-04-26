@@ -1,8 +1,14 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { buildSchema, prop } from '@typegoose/typegoose';
+import {
+  buildSchema,
+  modelOptions,
+  prop,
+  Severity,
+} from '@typegoose/typegoose';
 import { Schema } from 'mongoose';
 import { AutoMap } from 'nestjsx-automapper';
 
+@modelOptions({ options: { allowMixed: Severity.ALLOW } })
 export abstract class BaseModel {
   @prop()
   @AutoMap()
