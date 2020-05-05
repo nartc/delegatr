@@ -45,11 +45,11 @@ export class AppModule implements OnModuleInit {
   private logger = new Logger(AppModule.name);
 
   constructor(
-    @Inject('backgroundClient') private readonly roleClient: ClientProxy
+    @Inject('backgroundClient') private readonly client: ClientProxy
   ) {}
 
   onModuleInit() {
-    this.roleClient.send(RoleJob.PopulateSystemRoles, {}).subscribe(() => {
+    this.client.send(RoleJob.PopulateSystemRoles, {}).subscribe(() => {
       this.logger.log('Populating system roles...');
     });
   }

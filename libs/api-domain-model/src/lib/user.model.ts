@@ -13,7 +13,7 @@ export class User extends BaseModel {
     trim: true,
     minlength: 8,
     maxlength: 100,
-    text: true,
+    text: true
   })
   email: string;
   @prop({ required: true, minlength: 1, maxlength: 100, index: true })
