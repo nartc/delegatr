@@ -16,33 +16,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@delegatr/api-config": ["libs/api-config/src/index.ts"],
-      "@delegatr/api-user-repository": [
-        "libs/api-user-repository/src/index.ts"
-      ],
-      "@delegatr/api-common": ["libs/api-common/src/index.ts"],
-      "@delegatr/api-domain-model": ["libs/api-domain-model/src/index.ts"],
-      "@delegatr/api-role-repository": [
-        "libs/api-role-repository/src/index.ts"
-      ],
-      "@delegatr/api-auth": ["libs/api-auth/src/index.ts"],
-      "@delegatr/api-view-model": ["libs/api-view-model/src/index.ts"],
-      "@delegatr/background-common": ["libs/background-common/src/index.ts"],
-      "@delegatr/background-user-queue": [
-        "libs/background-user-queue/src/index.ts"
-      ],
-      "@delegatr/background-config": ["libs/background-config/src/index.ts"],
-      "@delegatr/shared-config": ["libs/shared-config/src/index.ts"],
-      "@delegatr/background-role-queue": [
-        "libs/background-role-queue/src/index.ts"
-      ],
-      "@delegatr/shared-db": ["libs/shared-db/src/index.ts"],
-      "@delegatr/api-task-repository": [
-        "libs/api-task-repository/src/index.ts"
-      ],
-      "@delegatr/api-assignment-repository": [
-        "libs/api-assignment-repository/src/index.ts"
-      ]
+      "@delegatr/api-interfaces": ["libs/api-interfaces/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

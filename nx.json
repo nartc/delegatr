@@ -29,52 +29,7 @@
     "api": {
       "tags": []
     },
-    "api-config": {
-      "tags": []
-    },
-    "api-user-repository": {
-      "tags": []
-    },
-    "api-common": {
-      "tags": []
-    },
-    "api-domain-model": {
-      "tags": []
-    },
-    "api-role-repository": {
-      "tags": []
-    },
-    "api-auth": {
-      "tags": []
-    },
-    "api-view-model": {
-      "tags": []
-    },
-    "background": {
-      "tags": []
-    },
-    "background-common": {
-      "tags": []
-    },
-    "background-user-queue": {
-      "tags": []
-    },
-    "background-config": {
-      "tags": []
-    },
-    "shared-config": {
-      "tags": []
-    },
-    "background-role-queue": {
-      "tags": []
-    },
-    "shared-db": {
-      "tags": []
-    },
-    "api-task-repository": {
-      "tags": []
-    },
-    "api-assignment-repository": {
+    "api-interfaces": {
       "tags": []
     }
   }
