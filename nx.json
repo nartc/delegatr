@@ -29,7 +29,13 @@
     "api": {
       "tags": []
     },
-    "api-interfaces": {
+    "api-common": {
+      "tags": []
+    },
+    "api-config": {
+      "tags": []
+    },
+    "api-role": {
       "tags": []
     }
   }

@@ -16,7 +16,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@delegatr/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@delegatr/api/common": ["libs/api/common/src/index.ts"],
+      "@delegatr/api/config": ["libs/api/config/src/index.ts"],
+      "@delegatr/api/role": ["libs/api/role/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
