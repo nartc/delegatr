@@ -1,11 +1,30 @@
+import { ApiAuthModule } from '@delegatr/api/auth';
+import {
+  ApiConfigModule,
+  DbConfig,
+  dbConfiguration,
+} from '@delegatr/api/config';
+import { ApiRoleModule } from '@delegatr/api/role';
 import { Module } from '@nestjs/common';
-
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    MongooseModule.forRootAsync({
+      inject: [dbConfiguration.KEY],
+      useFactory: (dbConfig: DbConfig) => ({
+        uri: dbConfig.uri,
+        retryAttempts: 5,
+        retryDelay: 1000,
+        useFindAndModify: false,
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useUnifiedTopology: true,
+      }),
+    }),
+    ApiConfigModule,
+    ApiAuthModule,
+    ApiRoleModule,
+  ],
 })
 export class AppModule {}

@@ -1,6 +1,5 @@
 import { InternalServerErrorException } from '@nestjs/common';
-import { DocumentType, ReturnModelType } from '@typegoose/typegoose';
-import { AnyParamConstructor } from '@typegoose/typegoose/lib/types';
+import { DocumentType } from '@typegoose/typegoose';
 import { MongoError } from 'mongodb';
 import {
   DocumentQuery,
@@ -9,7 +8,7 @@ import {
   Types,
   UpdateQuery,
 } from 'mongoose';
-import { BaseModel } from './base.model';
+import { BaseModel, ModelType } from './base.model';
 
 type QueryList<T extends BaseModel> = DocumentQuery<
   Array<DocumentType<T>>,
@@ -26,9 +25,9 @@ interface QueryOptions {
 }
 
 export abstract class BaseRepository<T extends BaseModel> {
-  protected model: ReturnModelType<AnyParamConstructor<T>>;
+  protected model: ModelType<T>;
 
-  protected constructor(model: ReturnModelType<AnyParamConstructor<T>>) {
+  protected constructor(model: ModelType<T>) {
     this.model = model;
   }
 

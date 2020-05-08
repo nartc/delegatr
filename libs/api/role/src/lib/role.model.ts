@@ -1,6 +1,6 @@
 import { BaseModel, useMongoosePlugin } from '@delegatr/api/common';
-import { prop } from '@typegoose/typegoose';
-import { Schema } from 'mongoose';
+import { Permission } from '@delegatr/api/permission';
+import { arrayProp, prop } from '@typegoose/typegoose';
 import { AutoMap } from 'nestjsx-automapper';
 
 @useMongoosePlugin()
@@ -14,17 +14,23 @@ export class Role extends BaseModel {
   @prop({
     required: true,
     unique: true,
-    index: true,
     text: true,
     maxlength: 255,
     minlength: 6,
   })
   @AutoMap()
   name: string;
+  @prop({
+    unique: true,
+    text: true,
+    minlength: 6,
+  })
+  @AutoMap()
+  slug: string;
   @prop({ required: true, maxlength: 255, minlength: 6 })
   @AutoMap()
   note: string;
-  @prop({ required: true, default: {}, type: Schema.Types.Mixed })
-  @AutoMap()
-  permissions: any; // TODO: type Permission
+  @arrayProp({ items: Permission, default: [] })
+  @AutoMap(() => Permission)
+  permissions: Permission[];
 }

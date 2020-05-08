@@ -37,6 +37,21 @@
     },
     "api-role": {
       "tags": []
+    },
+    "api-view-models": {
+      "tags": []
+    },
+    "api-permission": {
+      "tags": []
+    },
+    "api-mappings": {
+      "tags": []
+    },
+    "api-user": {
+      "tags": []
+    },
+    "api-auth": {
+      "tags": []
     }
   }
 }

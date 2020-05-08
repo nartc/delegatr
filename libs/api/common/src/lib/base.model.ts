@@ -4,8 +4,10 @@ import {
   buildSchema,
   modelOptions,
   prop,
+  ReturnModelType,
   Severity,
 } from '@typegoose/typegoose';
+import { AnyParamConstructor } from '@typegoose/typegoose/lib/types';
 import { Schema } from 'mongoose';
 import { AutoMap } from 'nestjsx-automapper';
 
@@ -62,3 +64,7 @@ export abstract class BaseVm {
   @AutoMap()
   isActive: boolean;
 }
+
+export type ModelType<T extends BaseModel> = ReturnModelType<
+  AnyParamConstructor<T>
+>;

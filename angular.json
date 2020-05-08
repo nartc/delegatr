@@ -254,6 +254,136 @@
           }
         }
       }
+    },
+    "api-view-models": {
+      "root": "libs/api/view-models",
+      "sourceRoot": "libs/api/view-models/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/api/view-models/tsconfig.lib.json",
+              "libs/api/view-models/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/api/view-models/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/api/view-models/jest.config.js",
+            "tsConfig": "libs/api/view-models/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-permission": {
+      "root": "libs/api/permission",
+      "sourceRoot": "libs/api/permission/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/api/permission/tsconfig.lib.json",
+              "libs/api/permission/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/api/permission/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/api/permission/jest.config.js",
+            "tsConfig": "libs/api/permission/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-mappings": {
+      "root": "libs/api/mappings",
+      "sourceRoot": "libs/api/mappings/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/api/mappings/tsconfig.lib.json",
+              "libs/api/mappings/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/api/mappings/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/api/mappings/jest.config.js",
+            "tsConfig": "libs/api/mappings/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-user": {
+      "root": "libs/api/user",
+      "sourceRoot": "libs/api/user/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/api/user/tsconfig.lib.json",
+              "libs/api/user/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/api/user/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/api/user/jest.config.js",
+            "tsConfig": "libs/api/user/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-auth": {
+      "root": "libs/api/auth",
+      "sourceRoot": "libs/api/auth/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/api/auth/tsconfig.lib.json",
+              "libs/api/auth/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/api/auth/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/api/auth/jest.config.js",
+            "tsConfig": "libs/api/auth/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

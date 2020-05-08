@@ -18,7 +18,12 @@
     "paths": {
       "@delegatr/api/common": ["libs/api/common/src/index.ts"],
       "@delegatr/api/config": ["libs/api/config/src/index.ts"],
-      "@delegatr/api/role": ["libs/api/role/src/index.ts"]
+      "@delegatr/api/role": ["libs/api/role/src/index.ts"],
+      "@delegatr/api/view-models": ["libs/api/view-models/src/index.ts"],
+      "@delegatr/api/permission": ["libs/api/permission/src/index.ts"],
+      "@delegatr/api/mappings": ["libs/api/mappings/src/index.ts"],
+      "@delegatr/api/user": ["libs/api/user/src/index.ts"],
+      "@delegatr/api/auth": ["libs/api/auth/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
