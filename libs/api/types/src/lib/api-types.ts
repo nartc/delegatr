@@ -1,9 +1,11 @@
 import { BaseModel } from '@delegatr/api/common';
 import {
   appConfiguration,
+  arenaConfiguration,
   authConfiguration,
   dbConfiguration,
   redisConfiguration,
+  sgConfiguration,
 } from '@delegatr/api/config';
 import { ConfigType } from '@nestjs/config';
 import { ReturnModelType } from '@typegoose/typegoose';
@@ -17,3 +19,5 @@ export type AuthConfig = ConfigType<typeof authConfiguration>;
 export type DbConfig = ConfigType<typeof dbConfiguration>;
 export type AppConfig = ConfigType<typeof appConfiguration>;
 export type RedisConfig = ConfigType<typeof redisConfiguration>;
+export type ArenaConfig = ConfigType<typeof arenaConfiguration>;
+export type SgConfig = ConfigType<typeof sgConfiguration>;
