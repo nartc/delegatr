@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { ConfigType, registerAs } from '@nestjs/config';
+import { registerAs } from '@nestjs/config';
 
 export const authConfiguration = registerAs('auth', () => ({
   jwtSecret: process.env.JWT_SECRET || 'superSecret!',
@@ -8,4 +8,3 @@ export const authConfiguration = registerAs('auth', () => ({
 }));
 
 export const InjectAuthConfig = () => Inject(authConfiguration.KEY);
-export type AuthConfig = ConfigType<typeof authConfiguration>;

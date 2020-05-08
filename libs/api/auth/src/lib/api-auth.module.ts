@@ -1,4 +1,5 @@
-import { AuthConfig, authConfiguration } from '@delegatr/api/config';
+import { authConfiguration } from '@delegatr/api/config';
+import { AuthConfig } from '@delegatr/api/types';
 import { ApiUserModule } from '@delegatr/api/user';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';

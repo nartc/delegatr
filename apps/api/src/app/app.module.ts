@@ -1,12 +1,12 @@
 import { ApiAuthModule } from '@delegatr/api/auth';
-import {
-  ApiConfigModule,
-  DbConfig,
-  dbConfiguration,
-} from '@delegatr/api/config';
+import { ApiConfigModule, dbConfiguration } from '@delegatr/api/config';
+import '@delegatr/api/mappings';
 import { ApiRoleModule } from '@delegatr/api/role';
+import { DbConfig } from '@delegatr/api/types';
+import { ApiUserModule } from '@delegatr/api/user';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AutomapperModule } from 'nestjsx-automapper';
 
 @Module({
   imports: [
@@ -22,9 +22,11 @@ import { MongooseModule } from '@nestjs/mongoose';
         useUnifiedTopology: true,
       }),
     }),
+    AutomapperModule.withMapper(),
     ApiConfigModule,
     ApiAuthModule,
     ApiRoleModule,
+    ApiUserModule,
   ],
 })
 export class AppModule {}

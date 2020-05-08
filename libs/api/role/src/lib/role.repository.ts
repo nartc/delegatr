@@ -1,4 +1,5 @@
-import { BaseRepository, ModelType } from '@delegatr/api/common';
+import { BaseRepository } from '@delegatr/api/common';
+import { ModelType } from '@delegatr/api/types';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Role } from './role.model';

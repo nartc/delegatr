@@ -1,4 +1,5 @@
-import { AuthConfig, InjectAuthConfig } from '@delegatr/api/config';
+import { InjectAuthConfig } from '@delegatr/api/config';
+import { AuthConfig } from '@delegatr/api/types';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy, VerifiedCallback } from 'passport-jwt';

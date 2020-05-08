@@ -1,7 +1,7 @@
 import { BaseVm } from '@delegatr/api/common';
-import { PermissionVm } from '@delegatr/api/view-models';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { AutoMap } from 'nestjsx-automapper';
+import { PermissionVm } from './permission.vm';
 
 export class RoleVm extends BaseVm {
   @ApiProperty()

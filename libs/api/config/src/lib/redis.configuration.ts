@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { ConfigType, registerAs } from '@nestjs/config';
+import { registerAs } from '@nestjs/config';
 
 export const redisConfiguration = registerAs('redis', () => ({
   isCacheEnabled: true,
@@ -8,4 +8,3 @@ export const redisConfiguration = registerAs('redis', () => ({
 }));
 
 export const InjectRedisConfig = () => Inject(redisConfiguration.KEY);
-export type RedisConfig = ConfigType<typeof redisConfiguration>;

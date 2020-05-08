@@ -1,3 +1,4 @@
+import { ModelType } from '@delegatr/api/types';
 import { InternalServerErrorException } from '@nestjs/common';
 import { DocumentType } from '@typegoose/typegoose';
 import { MongoError } from 'mongodb';
@@ -8,7 +9,7 @@ import {
   Types,
   UpdateQuery,
 } from 'mongoose';
-import { BaseModel, ModelType } from './base.model';
+import { BaseModel } from './base.model';
 
 type QueryList<T extends BaseModel> = DocumentQuery<
   Array<DocumentType<T>>,

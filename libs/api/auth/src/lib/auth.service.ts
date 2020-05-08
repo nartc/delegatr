@@ -1,4 +1,5 @@
-import { AuthConfig, InjectAuthConfig } from '@delegatr/api/config';
+import { InjectAuthConfig } from '@delegatr/api/config';
+import { AuthConfig } from '@delegatr/api/types';
 import { User, UserService } from '@delegatr/api/user';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
