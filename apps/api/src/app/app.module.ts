@@ -4,6 +4,8 @@ import '@delegatr/api/mappings';
 import { ApiRoleModule } from '@delegatr/api/role';
 import { DbConfig } from '@delegatr/api/types';
 import { ApiUserModule } from '@delegatr/api/user';
+import { BackgroundRoleJobModule } from '@delegatr/background/role-job';
+import { BackgroundUserJobModule } from '@delegatr/background/user-job';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AutomapperModule } from 'nestjsx-automapper';
@@ -27,6 +29,8 @@ import { AutomapperModule } from 'nestjsx-automapper';
     ApiAuthModule,
     ApiRoleModule,
     ApiUserModule,
+    BackgroundUserJobModule,
+    BackgroundRoleJobModule,
   ],
 })
 export class AppModule {}

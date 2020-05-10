@@ -2,6 +2,7 @@ import { AuthUser } from '@delegatr/api/auth';
 import { memoize } from '@delegatr/api/common';
 import { CanActivate, ExecutionContext, Logger, mixin } from '@nestjs/common';
 import { Constructor } from '@nestjs/common/utils/merge-with-values.util';
+import { Request } from 'express';
 import { PermissionGroups } from '../permission-groups';
 import { Privilege } from '../privilege';
 
@@ -25,7 +26,8 @@ function createPermissionGuard(
     }
 
     canActivate(context: ExecutionContext) {
-      const currentUser = context.switchToHttp().getRequest().user as AuthUser;
+      const currentUser = context.switchToHttp().getRequest<Request>()
+        .user as AuthUser;
 
       const hasPermission = () => {
         return currentUser.role.permissions.some(

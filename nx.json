@@ -55,6 +55,18 @@
     },
     "api-types": {
       "tags": []
+    },
+    "api-security": {
+      "tags": []
+    },
+    "background-common": {
+      "tags": []
+    },
+    "background-user-job": {
+      "tags": []
+    },
+    "background-role-job": {
+      "tags": []
     }
   }
 }

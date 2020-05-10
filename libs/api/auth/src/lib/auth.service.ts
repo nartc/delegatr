@@ -5,6 +5,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { genSalt, hash } from 'bcrypt';
 import { AutoMapper, InjectMapper } from 'nestjsx-automapper';
+import { TokenResultVm } from '../../../view-models/src/lib/token-result.vm';
 import { AuthUser } from './auth-user';
 import { JwtPayload } from './jwt-payload';
 
@@ -26,8 +27,19 @@ export class AuthService {
     }
   }
 
-  authenticate(email: string, roleId: string): Promise<string> {
-    return this.jwtService.signAsync({ email, roleId });
+  async createAccessToken(email: string): Promise<TokenResultVm> {
+    const token = await this.jwtService.signAsync({ email });
+    const tokenResult = new TokenResultVm();
+    tokenResult.token = token;
+    tokenResult.computeExpiry(this.authConfig.jwtExpired);
+    return tokenResult;
+  }
+
+  createRefreshToken(id: string): Promise<string> {
+    return this.jwtService.signAsync(
+      { id },
+      { expiresIn: this.authConfig.refreshJwtExpired }
+    );
   }
 
   async validateUser(payload: JwtPayload): Promise<AuthUser> {

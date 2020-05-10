@@ -14,6 +14,7 @@
     "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
+    "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
       "@delegatr/api/common": ["libs/api/common/src/index.ts"],
@@ -24,7 +25,13 @@
       "@delegatr/api/mappings": ["libs/api/mappings/src/index.ts"],
       "@delegatr/api/user": ["libs/api/user/src/index.ts"],
       "@delegatr/api/auth": ["libs/api/auth/src/index.ts"],
-      "@delegatr/api/types": ["libs/api/types/src/index.ts"]
+      "@delegatr/api/types": ["libs/api/types/src/index.ts"],
+      "@delegatr/api/security": ["libs/api/security/src/index.ts"],
+      "@delegatr/background/common": ["libs/background/common/src/index.ts"],
+      "@delegatr/background/user-job": [
+        "libs/background/user-job/src/index.ts"
+      ],
+      "@delegatr/background/role-job": ["libs/background/role-job/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
