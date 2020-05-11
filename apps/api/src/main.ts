@@ -10,9 +10,7 @@ import {
   redisConfiguration,
 } from '@delegatr/api/config';
 import { AppConfig, ArenaConfig, RedisConfig } from '@delegatr/api/types';
-import { emailQueueName } from '@delegatr/background/email-job';
-import { roleQueueName } from '@delegatr/background/role-job';
-import { userQueueName } from '@delegatr/background/user-job';
+import { queueNames } from '@delegatr/background/common';
 import { HttpStatus, Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import compression from 'compression';
@@ -35,14 +33,12 @@ async function bootstrap() {
 
   const arena = new Arena(
     {
-      queues: [userQueueName, roleQueueName, emailQueueName].map(
-        (queueName) => ({
-          name: queueName,
-          hostId: queueName,
-          redis: { host: redisConfig.host, port: redisConfig.port },
-          type: 'bull',
-        })
-      ),
+      queues: queueNames.map((queueName) => ({
+        name: queueName,
+        hostId: queueName,
+        redis: { host: redisConfig.host, port: redisConfig.port },
+        type: 'bull',
+      })),
     },
     arenaConfig
   );

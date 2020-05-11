@@ -1,7 +1,7 @@
 import { User, UserService } from '@delegatr/api/user';
+import { UserJob, userQueueName } from '@delegatr/background/common';
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
-import { UserJob, userQueueName } from './user-job.constant';
 
 @Processor(userQueueName)
 export class UserJobConsumer {

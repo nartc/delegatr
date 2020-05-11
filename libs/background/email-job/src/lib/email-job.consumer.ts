@@ -1,6 +1,6 @@
 import { EmailService } from '@delegatr/api/email';
+import { emailQueueName } from '@delegatr/background/common';
 import { Processor } from '@nestjs/bull';
-import { emailQueueName } from './email-job.constant';
 
 @Processor(emailQueueName)
 export class EmailJobConsumer {
