@@ -1,9 +1,12 @@
 import { ApiAuthModule } from '@delegatr/api/auth';
+import { ApiCachingModule } from '@delegatr/api/caching';
 import { ApiConfigModule, dbConfiguration } from '@delegatr/api/config';
+import { ApiEmailModule } from '@delegatr/api/email';
 import '@delegatr/api/mappings';
 import { ApiRoleModule } from '@delegatr/api/role';
 import { DbConfig } from '@delegatr/api/types';
 import { ApiUserModule } from '@delegatr/api/user';
+import { BackgroundEmailJobModule } from '@delegatr/background/email-job';
 import { BackgroundRoleJobModule } from '@delegatr/background/role-job';
 import { BackgroundUserJobModule } from '@delegatr/background/user-job';
 import { Module } from '@nestjs/common';
@@ -26,11 +29,14 @@ import { AutomapperModule } from 'nestjsx-automapper';
     }),
     AutomapperModule.withMapper(),
     ApiConfigModule,
+    ApiCachingModule,
+    ApiEmailModule,
     ApiAuthModule,
     ApiRoleModule,
     ApiUserModule,
     BackgroundUserJobModule,
     BackgroundRoleJobModule,
+    BackgroundEmailJobModule,
   ],
 })
 export class AppModule {}
