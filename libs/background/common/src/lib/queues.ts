@@ -21,3 +21,6 @@ export const queueProviderFactory = (name: string) => (
 
 export const roleQueueName = 'roleQueue';
 export const userQueueName = 'userQueue';
+export const emailQueueName = 'emailQueue';
+
+export const queueNames = [roleQueueName, userQueueName, emailQueueName];

@@ -67,6 +67,15 @@
     },
     "background-role-job": {
       "tags": []
+    },
+    "api-caching": {
+      "tags": []
+    },
+    "api-email": {
+      "tags": []
+    },
+    "background-email-job": {
+      "tags": []
     }
   }
 }

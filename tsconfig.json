@@ -31,7 +31,14 @@
       "@delegatr/background/user-job": [
         "libs/background/user-job/src/index.ts"
       ],
-      "@delegatr/background/role-job": ["libs/background/role-job/src/index.ts"]
+      "@delegatr/background/role-job": [
+        "libs/background/role-job/src/index.ts"
+      ],
+      "@delegatr/api/caching": ["libs/api/caching/src/index.ts"],
+      "@delegatr/api/email": ["libs/api/email/src/index.ts"],
+      "@delegatr/background/email-job": [
+        "libs/background/email-job/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
