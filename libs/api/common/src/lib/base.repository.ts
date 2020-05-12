@@ -2,23 +2,13 @@ import { ModelType } from '@delegatr/api/types';
 import { InternalServerErrorException } from '@nestjs/common';
 import { DocumentType } from '@typegoose/typegoose';
 import { MongoError } from 'mongodb';
-import {
-  DocumentQuery,
-  FilterQuery,
-  Query,
-  Types,
-  UpdateQuery,
-} from 'mongoose';
+import { DocumentQuery, FilterQuery, Query, Types, UpdateQuery } from 'mongoose';
 import { BaseModel } from './base.model';
 
-type QueryList<T extends BaseModel> = DocumentQuery<
-  Array<DocumentType<T>>,
-  DocumentType<T>
->;
-type QueryItem<T extends BaseModel> = DocumentQuery<
-  DocumentType<T>,
-  DocumentType<T>
->;
+type QueryList<T extends BaseModel> = DocumentQuery<Array<DocumentType<T>>,
+  DocumentType<T>>;
+type QueryItem<T extends BaseModel> = DocumentQuery<DocumentType<T>,
+  DocumentType<T>>;
 
 interface QueryOptions {
   lean?: boolean;
@@ -51,7 +41,7 @@ export abstract class BaseRepository<T extends BaseModel> {
   protected getQueryOptions(options?: QueryOptions) {
     const mergedOptions = {
       ...BaseRepository.defaultOptions,
-      ...(options || {}),
+      ...(options || {})
     };
     const option = mergedOptions.lean ? { virtuals: true } : null;
 
@@ -117,7 +107,7 @@ export abstract class BaseRepository<T extends BaseModel> {
   ): QueryItem<T> {
     return this.model
       .findByIdAndUpdate(BaseRepository.toObjectId(id), updateQuery, {
-        new: true,
+        new: true
       })
       .setOptions(this.getQueryOptions(options));
   }

@@ -3,9 +3,14 @@ import { Cache } from 'cache-manager';
 
 @Injectable()
 export class CacheService {
-  constructor(@Inject(CACHE_MANAGER) private readonly cache: Cache) {}
+  constructor(@Inject(CACHE_MANAGER) private readonly cache: Cache) {
+  }
 
-  async get<TType>(cacheKey: string, cb: () => Promise<TType>, ttl?: number) {
+  async get<TType = unknown>(
+    cacheKey: string,
+    cb: () => Promise<TType>,
+    ttl?: number
+  ): Promise<TType> {
     return await this.cache.wrap(cacheKey, cb, { ttl });
   }
 

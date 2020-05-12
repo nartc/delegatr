@@ -8,6 +8,5 @@ import { SecurityService } from './security.service';
   imports: [ApiAuthModule, ApiUserModule],
   controllers: [SecurityController],
   providers: [SecurityService],
-  exports: [],
 })
 export class ApiSecurityModule {}

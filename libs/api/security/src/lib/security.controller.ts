@@ -1,7 +1,7 @@
-import { ApiErrors } from '@delegatr/api/common';
-import { Controller, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiErrors, ApiOperationId } from '@delegatr/api/common';
+import { RegisterParamsVm } from '@delegatr/api/view-models';
+import { Body, Controller, Post } from '@nestjs/common';
+import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { SecurityService } from './security.service';
 
 @Controller('security')
@@ -10,6 +10,10 @@ import { SecurityService } from './security.service';
 export class SecurityController {
   constructor(private readonly securityService: SecurityService) {}
 
-  @UseGuards(AuthGuard())
-  async get() {}
+  @Post('register')
+  @ApiCreatedResponse({})
+  @ApiOperationId()
+  async register(@Body() registerParams: RegisterParamsVm): Promise<void> {
+    return await this.securityService.register(registerParams);
+  }
 }

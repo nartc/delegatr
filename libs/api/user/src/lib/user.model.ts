@@ -23,8 +23,10 @@ export class User extends BaseModel {
   lastName: string;
   @prop({ required: true, minlength: 6 })
   password: string;
-  @prop({ required: true })
+  @prop()
   refreshToken: string;
+  @prop()
+  verify: Date;
   @prop({ ref: Role, autopopulate: true, default: null })
   @AutoMap(() => Role)
   role: Ref<Role>;

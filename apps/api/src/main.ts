@@ -13,6 +13,7 @@ import { AppConfig, ArenaConfig, RedisConfig } from '@delegatr/api/types';
 import { queueNames } from '@delegatr/background/common';
 import { HttpStatus, Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import compression from 'compression';
 import helmet from 'helmet';
 import { AppModule } from './app/app.module';
@@ -45,6 +46,24 @@ async function bootstrap() {
   const arenaEndpoint = `/${ globalPrefix }/arena`;
   app.use(arenaEndpoint, arena);
   Logger.log(`Arena: ${ appConfig.domain }${ arenaEndpoint }`, 'NestApplication');
+
+  const swaggerDocOptions = new DocumentBuilder()
+    .setTitle('Delegatr API')
+    .setDescription('API documentation for Delegatr')
+    .setVersion('1.0.0')
+    .addServer(`${ appConfig.domain }/${ globalPrefix }`, 'Development API')
+    .addBearerAuth()
+    .build();
+
+  const swaggerDoc = SwaggerModule.createDocument(app, swaggerDocOptions);
+  SwaggerModule.setup('api/docs', app, swaggerDoc, {
+    swaggerOptions: {
+      docExpansion: 'none',
+      filter: true,
+      showRequestDuration: true
+    }
+  });
+  Logger.log(`Swagger Docs enabled: ${ appConfig.domain }/${ globalPrefix }/docs`, 'NestApplication');
 
   app.use('/robots.txt', (_, res) => {
     res.send('User-Agent: *\n' + 'Disallow: /');
