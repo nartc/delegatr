@@ -68,6 +68,18 @@
     "background-role-job": {
       "tags": []
     },
+    "api-task": {
+      "tags": []
+    },
+    "api-assignment": {
+      "tags": []
+    },
+    "api-timeframe": {
+      "tags": []
+    },
+    "api-availability-pool": {
+      "tags": []
+    },
     "api-caching": {
       "tags": []
     },
