@@ -31,7 +31,15 @@
       "@delegatr/background/user-job": [
         "libs/background/user-job/src/index.ts"
       ],
-      "@delegatr/background/role-job": ["libs/background/role-job/src/index.ts"]
+      "@delegatr/background/role-job": [
+        "libs/background/role-job/src/index.ts"
+      ],
+      "@delegatr/api/task": ["libs/api/task/src/index.ts"],
+      "@delegatr/api/assignment": ["libs/api/assignment/src/index.ts"],
+      "@delegatr/api/timeframe": ["libs/api/timeframe/src/index.ts"],
+      "@delegatr/api/availability-pool": [
+        "libs/api/availability-pool/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

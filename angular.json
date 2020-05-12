@@ -514,6 +514,110 @@
           }
         }
       }
+    },
+    "api-task": {
+      "root": "libs/api/task",
+      "sourceRoot": "libs/api/task/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/api/task/tsconfig.lib.json",
+              "libs/api/task/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/api/task/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/api/task/jest.config.js",
+            "tsConfig": "libs/api/task/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-assignment": {
+      "root": "libs/api/assignment",
+      "sourceRoot": "libs/api/assignment/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/api/assignment/tsconfig.lib.json",
+              "libs/api/assignment/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/api/assignment/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/api/assignment/jest.config.js",
+            "tsConfig": "libs/api/assignment/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-timeframe": {
+      "root": "libs/api/timeframe",
+      "sourceRoot": "libs/api/timeframe/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/api/timeframe/tsconfig.lib.json",
+              "libs/api/timeframe/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/api/timeframe/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/api/timeframe/jest.config.js",
+            "tsConfig": "libs/api/timeframe/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-availability-pool": {
+      "root": "libs/api/availability-pool",
+      "sourceRoot": "libs/api/availability-pool/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/api/availability-pool/tsconfig.lib.json",
+              "libs/api/availability-pool/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/api/availability-pool/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/api/availability-pool/jest.config.js",
+            "tsConfig": "libs/api/availability-pool/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {
