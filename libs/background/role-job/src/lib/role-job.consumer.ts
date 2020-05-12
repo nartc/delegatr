@@ -1,6 +1,6 @@
 import { RoleService } from '@delegatr/api/role';
+import { roleQueueName } from '@delegatr/background/common';
 import { Processor } from '@nestjs/bull';
-import { roleQueueName } from './role-job.constant';
 
 @Processor(roleQueueName)
 export class RoleJobConsumer {
