@@ -2,6 +2,7 @@ import { ApiAuthModule } from '@delegatr/api/auth';
 import { ApiConfigModule, dbConfiguration } from '@delegatr/api/config';
 import '@delegatr/api/mappings';
 import { ApiRoleModule } from '@delegatr/api/role';
+import { ApiSecurityModule } from '@delegatr/api/security';
 import { DbConfig } from '@delegatr/api/types';
 import { ApiUserModule } from '@delegatr/api/user';
 import { BackgroundRoleJobModule } from '@delegatr/background/role-job';
@@ -27,6 +28,7 @@ import { AutomapperModule } from 'nestjsx-automapper';
     AutomapperModule.withMapper(),
     ApiConfigModule,
     ApiAuthModule,
+    ApiSecurityModule,
     ApiRoleModule,
     ApiUserModule,
     BackgroundUserJobModule,

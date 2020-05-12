@@ -1,6 +1,6 @@
+import { BaseService } from '@delegatr/api/common';
 import { Injectable } from '@nestjs/common';
 import { AutoMapper, InjectMapper } from 'nestjsx-automapper';
-import { BaseService } from '../../../common/src/lib/base.service';
 import { User } from './user.model';
 import { UserRepository } from './user.repository';
 
