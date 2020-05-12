@@ -18,3 +18,9 @@ export const queueProviderFactory = (name: string) => (
   },
   defaultJobOptions: queueDefaultOptions.defaultJobOptions,
 });
+
+export const roleQueueName = 'roleQueue';
+export const userQueueName = 'userQueue';
+export const emailQueueName = 'emailQueue';
+
+export const queueNames = [roleQueueName, userQueueName, emailQueueName];

@@ -2,7 +2,7 @@ import { AuthUser } from '@delegatr/api/auth';
 import { Permission } from '@delegatr/api/permission';
 import { Role } from '@delegatr/api/role';
 import { User } from '@delegatr/api/user';
-import { RoleVm, UserVm } from '@delegatr/api/view-models';
+import { RoleVm, UserInformationVm, UserVm } from '@delegatr/api/view-models';
 import {
   AutoMapper,
   mapFrom,
@@ -10,7 +10,6 @@ import {
   Profile,
   ProfileBase,
 } from 'nestjsx-automapper';
-import { UserInformationVm } from '../../../view-models/src/lib/user-information.vm';
 
 @Profile()
 export class UserProfile extends ProfileBase {

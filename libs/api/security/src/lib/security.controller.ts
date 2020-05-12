@@ -1,5 +1,6 @@
 import { ApiErrors } from '@delegatr/api/common';
-import { Controller } from '@nestjs/common';
+import { Controller, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ApiTags } from '@nestjs/swagger';
 import { SecurityService } from './security.service';
 
@@ -8,4 +9,7 @@ import { SecurityService } from './security.service';
 @ApiErrors()
 export class SecurityController {
   constructor(private readonly securityService: SecurityService) {}
+
+  @UseGuards(AuthGuard())
+  async get() {}
 }

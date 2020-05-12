@@ -7,11 +7,10 @@ import { HttpExceptionFilter } from '@delegatr/api/common';
 import {
   appConfiguration,
   arenaConfiguration,
-  redisConfiguration,
+  redisConfiguration
 } from '@delegatr/api/config';
 import { AppConfig, ArenaConfig, RedisConfig } from '@delegatr/api/types';
-import { roleQueueName } from '@delegatr/background/role-job';
-import { userQueueName } from '@delegatr/background/user-job';
+import { queueNames } from '@delegatr/background/common';
 import { HttpStatus, Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import compression from 'compression';
@@ -34,18 +33,18 @@ async function bootstrap() {
 
   const arena = new Arena(
     {
-      queues: [userQueueName, roleQueueName].map((queueName) => ({
+      queues: queueNames.map((queueName) => ({
         name: queueName,
         hostId: queueName,
         redis: { host: redisConfig.host, port: redisConfig.port },
-        type: 'bull',
-      })),
+        type: 'bull'
+      }))
     },
     arenaConfig
   );
-  const arenaEndpoint = `/${globalPrefix}/arena`;
+  const arenaEndpoint = `/${ globalPrefix }/arena`;
   app.use(arenaEndpoint, arena);
-  Logger.log(`Arena: ${appConfig.domain}${arenaEndpoint}`, 'NestApplication');
+  Logger.log(`Arena: ${ appConfig.domain }${ arenaEndpoint }`, 'NestApplication');
 
   app.use('/robots.txt', (_, res) => {
     res.send('User-Agent: *\n' + 'Disallow: /');

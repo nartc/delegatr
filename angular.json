@@ -593,6 +593,84 @@
         }
       }
     },
+    "api-caching": {
+      "root": "libs/api/caching",
+      "sourceRoot": "libs/api/caching/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/api/caching/tsconfig.lib.json",
+              "libs/api/caching/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/api/caching/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/api/caching/jest.config.js",
+            "tsConfig": "libs/api/caching/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-email": {
+      "root": "libs/api/email",
+      "sourceRoot": "libs/api/email/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/api/email/tsconfig.lib.json",
+              "libs/api/email/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/api/email/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/api/email/jest.config.js",
+            "tsConfig": "libs/api/email/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "background-email-job": {
+      "root": "libs/background/email-job",
+      "sourceRoot": "libs/background/email-job/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/background/email-job/tsconfig.lib.json",
+              "libs/background/email-job/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/background/email-job/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/background/email-job/jest.config.js",
+            "tsConfig": "libs/background/email-job/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "api-availability-pool": {
       "root": "libs/api/availability-pool",
       "sourceRoot": "libs/api/availability-pool/src",
