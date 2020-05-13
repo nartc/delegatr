@@ -2,6 +2,7 @@ import { CacheService } from '@delegatr/api/caching';
 import { BaseService } from '@delegatr/api/common';
 import { UserVm } from '@delegatr/api/view-models';
 import { Injectable } from '@nestjs/common';
+import parse from 'date-fns/parse';
 import { AutoMapper, InjectMapper } from 'nestjsx-automapper';
 import { User } from './user.model';
 import { UserRepository } from './user.repository';
@@ -26,5 +27,30 @@ export class UserService extends BaseService<User> {
     );
 
     return this.mapper.mapArray(users, UserVm, User);
+  }
+
+  async verify(id: string): Promise<UserVm> {
+    const now = parse(
+      new Date().toLocaleString(),
+      'M/d/yyyy, h:mm:ss aaa',
+      Date.now()
+    );
+    const result = await this.userRepository
+      .updateBy(id, {
+        $set: { verify: now },
+      })
+      .exec();
+
+    return this.mapper.map(result, UserVm, User);
+  }
+
+  async saveRefreshToken(id: string, token: string) {
+    await this.userRepository
+      .updateBy(
+        id,
+        { $set: { refreshToken: token } },
+        { lean: false, autopopulate: false }
+      )
+      .exec();
   }
 }

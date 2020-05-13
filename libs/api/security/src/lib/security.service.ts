@@ -1,18 +1,26 @@
 import { AuthService } from '@delegatr/api/auth';
 import { UserService } from '@delegatr/api/user';
-import { LoginParamsVm, RegisterParamsVm } from '@delegatr/api/view-models';
+import {
+  LoginParamsVm,
+  RegisterParamsVm,
+  TokenResultVm,
+  UserVm,
+} from '@delegatr/api/view-models';
 import {
   EmailJob,
   emailQueueName,
   UserJob,
   userQueueName,
-  VerifyRegistrationEmailData
+  VerifyRegistrationEmailData,
 } from '@delegatr/background/common';
 import { InjectQueue } from '@nestjs/bull';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { compare } from 'bcrypt';
 import { Queue } from 'bull';
-import { TokenResultVm } from '../../../view-models/src/lib/token-result.vm';
 
 @Injectable()
 export class SecurityService {
@@ -21,8 +29,7 @@ export class SecurityService {
     private readonly userService: UserService,
     @InjectQueue(emailQueueName) private readonly emailQueue: Queue,
     @InjectQueue(userQueueName) private readonly userQueue: Queue
-  ) {
-  }
+  ) {}
 
   async register(params: RegisterParamsVm): Promise<void> {
     const { email, password, firstName, lastName } = params;
@@ -34,14 +41,15 @@ export class SecurityService {
     const newUser = this.userService.createModel({
       email,
       firstName,
-      lastName
+      lastName,
     });
     newUser.password = await this.authService.hashPassword(password);
     await this.userQueue.add(UserJob.AddUser, newUser);
+    const verifyToken = await this.authService.createVerifyToken(newUser.email);
     const emailData: VerifyRegistrationEmailData = {
       email: newUser.email,
       firstName: newUser.firstName,
-      verifyUrl: ''
+      verifyUrl: 'url' + verifyToken,
     };
     await this.emailQueue.add(EmailJob.VerifyRegistration, emailData);
   }
@@ -50,19 +58,59 @@ export class SecurityService {
     const { email, password } = params;
     const user = await this.userService.findByEmail(email);
     if (user == null) {
-      throw new BadRequestException(email, 'Wrong credentials');
+      throw new NotFoundException(email, 'Wrong credentials');
+    }
+
+    if (user.verify == null) {
+      throw new BadRequestException(email, 'User not verified');
     }
 
     const isMatched = await compare(password, user.password);
     if (!isMatched) {
-      throw new BadRequestException(password, 'Wrong credentials');
+      throw new NotFoundException(password, 'Wrong credentials');
     }
 
-    const [accessTokenResult, refreshToken] = await Promise.all([
+    const [accessTokenResult, refreshToken]: [
+      TokenResultVm,
+      string
+    ] = await Promise.all([
       this.authService.createAccessToken(user.email),
-      this.authService.createRefreshToken(user.id)
+      this.authService.createRefreshToken(user.id),
     ]);
-
+    await this.userService.saveRefreshToken(user.id, refreshToken);
     return [accessTokenResult, refreshToken];
+  }
+
+  async verify(token: string): Promise<UserVm> {
+    const { email } = await this.authService.verify<{ email: string }>(token);
+    const user = await this.userService.findByEmail(email);
+    if (user == null) {
+      throw new NotFoundException(email, 'User not found');
+    }
+
+    if (user.verify != null) {
+      throw new BadRequestException(email, 'User has been verified');
+    }
+
+    return await this.userService.verify(user.id);
+  }
+
+  async resendVerificationEmail(email: string): Promise<void> {
+    const user = await this.userService.findByEmail(email);
+    if (user == null) {
+      throw new NotFoundException(email, 'User not found');
+    }
+
+    if (user.verify != null) {
+      throw new BadRequestException(email, 'User has been verified');
+    }
+
+    const token = await this.authService.createVerifyToken(user.email);
+    const emailData: VerifyRegistrationEmailData = {
+      email: user.email,
+      firstName: user.firstName,
+      verifyUrl: 'url' + token,
+    };
+    await this.emailQueue.add(EmailJob.VerifyRegistration, emailData);
   }
 }
