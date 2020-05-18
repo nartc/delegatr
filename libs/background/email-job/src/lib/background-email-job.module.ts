@@ -5,9 +5,10 @@ import {
   queueProviderFactory,
 } from '@delegatr/background/common';
 import { BullModule } from '@nestjs/bull';
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { EmailJobConsumer } from './email-job.consumer';
 
+@Global()
 @Module({
   imports: [
     BullModule.registerQueueAsync({
@@ -18,5 +19,6 @@ import { EmailJobConsumer } from './email-job.consumer';
     ApiEmailModule,
   ],
   providers: [EmailJobConsumer],
+  exports: [BullModule],
 })
 export class BackgroundEmailJobModule {}

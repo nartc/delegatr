@@ -1,11 +1,11 @@
 import { InjectAuthConfig } from '@delegatr/api/config';
 import { AuthConfig } from '@delegatr/api/types';
 import { User, UserService } from '@delegatr/api/user';
+import { TokenResultVm } from '@delegatr/api/view-models';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { genSalt, hash } from 'bcrypt';
 import { AutoMapper, InjectMapper } from 'nestjsx-automapper';
-import { TokenResultVm } from '../../../view-models/src/lib/token-result.vm';
 import { AuthUser } from './auth-user';
 import { JwtPayload } from './jwt-payload';
 
@@ -35,11 +35,23 @@ export class AuthService {
     return tokenResult;
   }
 
-  createRefreshToken(id: string): Promise<string> {
-    return this.jwtService.signAsync(
+  async createRefreshToken(id: string): Promise<string> {
+    return await this.jwtService.signAsync(
       { id },
       { expiresIn: this.authConfig.refreshJwtExpired }
     );
+  }
+
+  async createVerifyToken(email: string): Promise<string> {
+    return await this.jwtService.signAsync({ email }, { expiresIn: '1h' });
+  }
+
+  async verify<TPayload extends object = {}>(token: string): Promise<TPayload> {
+    try {
+      return await this.jwtService.verifyAsync<TPayload>(token);
+    } catch (e) {
+      throw new InternalServerErrorException(token, 'Error verifying token');
+    }
   }
 
   async validateUser(payload: JwtPayload): Promise<AuthUser> {
