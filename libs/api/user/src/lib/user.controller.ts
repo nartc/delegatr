@@ -9,8 +9,7 @@ import { UserService } from './user.service';
 @ApiTags(User.modelName)
 @ApiErrors()
 export class UserController {
-  constructor(private readonly userService: UserService) {
-  }
+  constructor(private readonly userService: UserService) {}
 
   @Get()
   @ApiOkResponse({ type: UserVm, isArray: true })

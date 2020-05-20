@@ -13,6 +13,7 @@ import { CacheService } from './cache.service';
         store: ioRedisStore,
         host: redisConfig.host,
         port: redisConfig.port,
+        ttl: Number(redisConfig.ttl),
       }),
     }),
   ],
