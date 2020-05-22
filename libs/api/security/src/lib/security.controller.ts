@@ -48,8 +48,10 @@ export class SecurityController {
     const [tokenResult, refreshToken] = await this.securityService.login(
       loginParams
     );
-    res.cookie('refresh-token', refreshToken, { httpOnly: true, secure: true });
-    res.status(HttpStatus.CREATED).json(tokenResult);
+    res
+      .cookie('refresh_token', refreshToken, { httpOnly: true, secure: true })
+      .status(HttpStatus.CREATED)
+      .json(tokenResult);
   }
 
   @Put('verify')

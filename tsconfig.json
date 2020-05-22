@@ -38,10 +38,16 @@
       "@delegatr/api/assignment": ["libs/api/assignment/src/index.ts"],
       "@delegatr/api/timeframe": ["libs/api/timeframe/src/index.ts"],
       "@delegatr/api/availability-pool": [
-        "libs/api/availability-pool/src/index.ts"],
+        "libs/api/availability-pool/src/index.ts"
+      ],
       "@delegatr/api/caching": ["libs/api/caching/src/index.ts"],
       "@delegatr/api/email": ["libs/api/email/src/index.ts"],
-      "@delegatr/background/email-job": ["libs/background/email-job/src/index.ts"]
+      "@delegatr/background/email-job": [
+        "libs/background/email-job/src/index.ts"
+      ],
+      "@delegatr/client/core": ["libs/client/core/src/index.ts"],
+      "@delegatr/client/nswag": ["libs/client/nswag/src/index.ts"],
+      "@delegatr/client/common": ["libs/client/common/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

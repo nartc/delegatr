@@ -11,7 +11,7 @@ export class User extends BaseModel {
     trim: true,
     minlength: 8,
     maxlength: 100,
-    text: true,
+    index: true
   })
   @AutoMap()
   email: string;

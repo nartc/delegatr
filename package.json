@@ -27,7 +27,8 @@
     "help": "nx help",
     "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
     "start:ng": "ng serve client",
-    "start:api": "ng serve api"
+    "start:api": "ng serve api",
+    "nswag": "nswag run nswag.json"
   },
   "private": true,
   "dependencies": {
@@ -48,6 +49,7 @@
     "@nestjs/passport": "7.0.0",
     "@nestjs/platform-express": "7.0.13",
     "@nestjs/swagger": "4.5.7",
+    "@rx-angular/state": "^1.1.1",
     "@sendgrid/mail": "7.1.1",
     "@typegoose/typegoose": "7.1.2",
     "bcrypt": "4.0.1",
@@ -65,6 +67,7 @@
     "mongoose-lean-virtuals": "0.6.2",
     "ms": "2.1.2",
     "nestjsx-automapper": "3.0.10",
+    "ng-zorro-antd": "^9.1.2",
     "passport": "0.4.1",
     "passport-jwt": "4.0.0",
     "reflect-metadata": "0.1.13",
@@ -100,6 +103,7 @@
     "eslint": "7.0.0",
     "jest": "26.0.1",
     "jest-preset-angular": "8.2.0",
+    "nswag": "^13.5.0",
     "prettier": "2.0.5",
     "ts-jest": "26.0.0",
     "ts-node": "8.10.1",
