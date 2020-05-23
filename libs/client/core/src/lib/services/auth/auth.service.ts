@@ -11,7 +11,7 @@ import { Observable, Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly $resendOverlay = new Subject();
+  private readonly $resendOverlay = new Subject<boolean>();
   readonly resendOverlay$ = this.$resendOverlay.asObservable();
 
   constructor(private readonly securityClient: SecurityClient) {}
