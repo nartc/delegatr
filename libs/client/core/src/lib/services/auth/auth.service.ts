@@ -4,6 +4,8 @@ import {
   RegisterParamsVm,
   SecurityClient,
   TokenResultVm,
+  UserVm,
+  VerifyRegistrationParamsVm,
 } from '@delegatr/client/nswag';
 import { Observable, Subject } from 'rxjs';
 
@@ -21,9 +23,14 @@ export class AuthService {
     return this.securityClient.login(params);
   }
 
-  register(formValue: unknown) {
+  register(formValue: unknown): Observable<void> {
     const params = RegisterParamsVm.fromJS(formValue);
     return this.securityClient.register(params);
+  }
+
+  verify(token: string): Observable<UserVm> {
+    const params = VerifyRegistrationParamsVm.fromJS({ token });
+    return this.securityClient.verify(params);
   }
 
   openResend() {

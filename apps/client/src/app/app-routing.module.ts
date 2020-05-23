@@ -5,6 +5,7 @@ import {
   LoginComponent,
   RegisterComponent,
 } from '@delegatr/client/core';
+import { VerifyComponent } from '../../../../libs/client/core/src/lib/verify/verify.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,10 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
+  },
+  {
+    path: 'verify',
+    component: VerifyComponent,
   },
 ];
 

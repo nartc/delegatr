@@ -1,1 +1,31 @@
-<p>verify works!</p>
+<ng-container *ngIf="vm$ | async as vm">
+  <nz-result
+    [nzStatus]="vm.status"
+    [nzTitle]="vm.title"
+    [nzSubTitle]="vm.subtitle"
+  >
+    <div nz-result-icon *ngIf="vm.isLoading">
+      <nz-spin [nzSpinning]="true"></nz-spin>
+    </div>
+    <div nz-result-extra>
+      <ng-container [ngSwitch]="true">
+        <button
+          *ngSwitchCase="vm.status === 'success'"
+          nz-button
+          nzType="primary"
+          [routerLink]="['/login']"
+        >
+          Log In
+        </button>
+        <button
+          *ngSwitchCase="vm.status === 'error' || vm.status === 'warning'"
+          nz-button
+          nzType="primary"
+          (click)="onResendVerificationClick()"
+        >
+          Resend Verification
+        </button>
+      </ng-container>
+    </div>
+  </nz-result>
+</ng-container>

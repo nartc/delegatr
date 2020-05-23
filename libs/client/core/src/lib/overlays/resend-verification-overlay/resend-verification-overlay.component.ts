@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { AuthService } from '@delegatr/client/core';
 import { ApiException } from '@delegatr/client/nswag';
 import { RxState } from '@rx-angular/state';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { finalize, startWith } from 'rxjs/operators';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'delegatr-resend-verification-overlay',
@@ -67,6 +67,11 @@ export class ResendVerificationOverlayComponent extends RxState<{
       .subscribe({
         next: () => {
           this.emailControl.reset();
+          this.nzNotificationService.success(
+            'Resend Verification Successfully',
+            'Please check your email'
+          );
+          this.authService.closeResend();
         },
         error: (err: ApiException) => {
           this.nzNotificationService.error(
