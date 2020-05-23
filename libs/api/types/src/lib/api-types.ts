@@ -6,6 +6,7 @@ import {
   dbConfiguration,
   redisConfiguration,
   sgConfiguration,
+  webConfiguration,
 } from '@delegatr/api/config';
 import { ConfigType } from '@nestjs/config';
 import { ReturnModelType } from '@typegoose/typegoose';
@@ -21,3 +22,4 @@ export type AppConfig = ConfigType<typeof appConfiguration>;
 export type RedisConfig = ConfigType<typeof redisConfiguration>;
 export type ArenaConfig = ConfigType<typeof arenaConfiguration>;
 export type SgConfig = ConfigType<typeof sgConfiguration>;
+export type WebConfig = ConfigType<typeof webConfiguration>;

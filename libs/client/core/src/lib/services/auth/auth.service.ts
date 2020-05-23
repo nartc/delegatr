@@ -5,12 +5,15 @@ import {
   SecurityClient,
   TokenResultVm,
 } from '@delegatr/client/nswag';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private readonly $resendOverlay = new Subject();
+  readonly resendOverlay$ = this.$resendOverlay.asObservable();
+
   constructor(private readonly securityClient: SecurityClient) {}
 
   login(email: string, password: string): Observable<TokenResultVm> {
@@ -21,5 +24,17 @@ export class AuthService {
   register(formValue: unknown) {
     const params = RegisterParamsVm.fromJS(formValue);
     return this.securityClient.register(params);
+  }
+
+  openResend() {
+    this.$resendOverlay.next(true);
+  }
+
+  closeResend() {
+    this.$resendOverlay.next(false);
+  }
+
+  resendVerification(email: string): Observable<void> {
+    return this.securityClient.resendVerificationEmail(email);
   }
 }

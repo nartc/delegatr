@@ -6,6 +6,7 @@ import { authConfiguration } from './auth.configuration';
 import { dbConfiguration } from './db.configuration';
 import { redisConfiguration } from './redis.configuration';
 import { sgConfiguration } from './sendgrid.configuration';
+import { webConfiguration } from './web.configuration';
 
 @Global()
 @Module({
@@ -20,6 +21,7 @@ import { sgConfiguration } from './sendgrid.configuration';
         redisConfiguration,
         arenaConfiguration,
         sgConfiguration,
+        webConfiguration,
       ],
     }),
   ],

@@ -10,5 +10,9 @@
   <nz-content>
     <router-outlet></router-outlet>
   </nz-content>
-  <nz-footer>Ant Design ©2020 Implement By Angular</nz-footer>
+  <nz-footer>
+    <p>Ant Design ©2020 Implement By Angular</p>
+    <a nz-button nzType="link" (click)="onResendClick()">Resend Verification</a>
+  </nz-footer>
 </nz-layout>
+<delegatr-resend-verification-overlay></delegatr-resend-verification-overlay>

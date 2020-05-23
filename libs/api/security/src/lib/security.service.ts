@@ -1,4 +1,6 @@
 import { AuthService } from '@delegatr/api/auth';
+import { InjectAppConfig, InjectWebConfig } from '@delegatr/api/config';
+import { AppConfig, WebConfig } from '@delegatr/api/types';
 import { UserService } from '@delegatr/api/user';
 import {
   LoginParamsVm,
@@ -28,7 +30,9 @@ export class SecurityService {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     @InjectQueue(emailQueueName) private readonly emailQueue: Queue,
-    @InjectQueue(userQueueName) private readonly userQueue: Queue
+    @InjectQueue(userQueueName) private readonly userQueue: Queue,
+    @InjectWebConfig() private readonly webConfig: WebConfig,
+    @InjectAppConfig() private readonly appConfig: AppConfig
   ) {}
 
   async register(params: RegisterParamsVm): Promise<void> {
@@ -49,9 +53,17 @@ export class SecurityService {
     const emailData: VerifyRegistrationEmailData = {
       email: newUser.email,
       firstName: newUser.firstName,
-      verifyUrl: 'url' + verifyToken,
+      verifyUrl: this.getVerifyUrl(verifyToken),
     };
     await this.emailQueue.add(EmailJob.VerifyRegistration, emailData);
+  }
+
+  private getVerifyUrl(verifyToken: string) {
+    return (
+      this.appConfig.clientDomain +
+      this.webConfig.verifyEndpoint +
+      `?token=${verifyToken}`
+    );
   }
 
   async login(params: LoginParamsVm): Promise<[TokenResultVm, string]> {
@@ -109,7 +121,7 @@ export class SecurityService {
     const emailData: VerifyRegistrationEmailData = {
       email: user.email,
       firstName: user.firstName,
-      verifyUrl: 'url' + token,
+      verifyUrl: this.getVerifyUrl(token),
     };
     await this.emailQueue.add(EmailJob.VerifyRegistration, emailData);
   }
