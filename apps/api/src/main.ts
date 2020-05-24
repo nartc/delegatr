@@ -15,6 +15,7 @@ import { HttpStatus, Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import compression from 'compression';
+import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { AppModule } from './app/app.module';
 
@@ -31,6 +32,7 @@ async function bootstrap() {
 
   app.use(compression());
   app.use(helmet());
+  app.use(cookieParser());
 
   const arena = new Arena(
     {
@@ -53,6 +55,7 @@ async function bootstrap() {
     .setVersion('1.0.0')
     .addServer(`${appConfig.domain}/${globalPrefix}`, 'Development API')
     .addBearerAuth()
+    .addCookieAuth('refresh_token')
     .build();
 
   const swaggerDoc = SwaggerModule.createDocument(app, swaggerDocOptions);

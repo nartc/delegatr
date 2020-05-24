@@ -1,6 +1,6 @@
 import { CacheService } from '@delegatr/api/caching';
 import { BaseService } from '@delegatr/api/common';
-import { UserVm } from '@delegatr/api/view-models';
+import { UserInformationVm, UserVm } from '@delegatr/api/view-models';
 import { Injectable } from '@nestjs/common';
 import parse from 'date-fns/parse';
 import { AutoMapper, InjectMapper } from 'nestjsx-automapper';
@@ -27,6 +27,17 @@ export class UserService extends BaseService<User> {
     );
 
     return this.mapper.mapArray(users, UserVm, User);
+  }
+
+  async getUserByRefreshToken(id: string, refreshToken: string): Promise<User> {
+    return await this.userRepository.findByRefreshToken(id, refreshToken);
+  }
+
+  async getUserById(id: string): Promise<UserInformationVm> {
+    const user = await this.cacheService.get(`user_${id}`, () =>
+      this.userRepository.findById(id).exec()
+    );
+    return this.mapper.map(user, UserInformationVm, User);
   }
 
   async verify(id: string): Promise<UserVm> {

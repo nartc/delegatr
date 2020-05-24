@@ -1,10 +1,4 @@
-import {
-  HTTP_INTERCEPTORS,
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -19,8 +13,9 @@ export class WithCredentialsInterceptor implements HttpInterceptor {
       req.url.includes('/security/refresh-token')
     ) {
       const cloned = req.clone({
-        withCredentials: true,
+        withCredentials: true
       });
+      console.log(cloned);
       return next.handle(cloned);
     }
 
@@ -32,6 +27,6 @@ export const WithCredentialsInterceptorProvider = [
   {
     provide: HTTP_INTERCEPTORS,
     useClass: WithCredentialsInterceptor,
-    multi: true,
-  },
+    multi: true
+  }
 ];

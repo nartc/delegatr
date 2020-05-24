@@ -44,7 +44,7 @@ export abstract class BaseModel {
   }
 
   static get featureConfig(): ModelDefinition {
-    return { name: this.name, schema: this.schema };
+    return { name: this.modelName, schema: this.schema };
   }
 }
 

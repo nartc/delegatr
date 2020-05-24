@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
+  AuthenticatedInterceptorProvider,
   ClientCoreModule,
   WithCredentialsInterceptorProvider,
 } from '@delegatr/client/core';
@@ -34,6 +35,7 @@ registerLocaleData(en);
   providers: [
     { provide: NZ_I18N, useValue: en_US },
     WithCredentialsInterceptorProvider,
+    AuthenticatedInterceptorProvider,
   ],
 })
 export class AppModule {}

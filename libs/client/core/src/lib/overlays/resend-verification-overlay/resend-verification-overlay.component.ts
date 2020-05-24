@@ -38,7 +38,7 @@ import { AuthService } from '../../services/auth/auth.service';
 export class ResendVerificationOverlayComponent extends RxState<{
   status: 'idle' | 'loading';
 }> {
-  visible$ = this.authService.resendOverlay$.pipe(startWith(false));
+  visible$ = this.authService.isResendActivate$.pipe(startWith(false));
   formStatus$ = this.select('status');
 
   emailControl = new FormControl('', [Validators.required, Validators.email]);

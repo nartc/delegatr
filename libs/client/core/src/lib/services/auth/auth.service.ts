@@ -1,26 +1,63 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
+  ApiException,
   LoginParamsVm,
   RegisterParamsVm,
   SecurityClient,
   TokenResultVm,
+  UserClient,
+  UserInformationVm,
   UserVm,
   VerifyRegistrationParamsVm,
 } from '@delegatr/client/nswag';
-import { Observable, Subject } from 'rxjs';
+import { RxState } from '@rx-angular/state';
+import differenceInMilliseconds from 'date-fns/differenceInMilliseconds';
+import subMinutes from 'date-fns/subMinutes';
+import { Observable, pipe, Subscription, throwError, timer } from 'rxjs';
+import { catchError, switchMap, tap } from 'rxjs/operators';
+
+interface AuthState {
+  isResendActivate: boolean;
+  token: string;
+  tokenExpiry: Date;
+  currentUser: UserInformationVm;
+}
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
-  private readonly $resendOverlay = new Subject<boolean>();
-  readonly resendOverlay$ = this.$resendOverlay.asObservable();
+export class AuthService extends RxState<AuthState> {
+  readonly isResendActivate$ = this.select('isResendActivate');
+  readonly token$ = this.select('token');
+  readonly currentUser$ = this.select('currentUser');
 
-  constructor(private readonly securityClient: SecurityClient) {}
+  private jwtTimerSubscription: Subscription;
+  private readonly handleTokenMe = () => {
+    return pipe<Observable<TokenResultVm>, Observable<UserInformationVm>>(
+      switchMap((result) => {
+        this._setupRefreshTimer(result);
+        return this.userClient.me().pipe(
+          tap((user) => {
+            this.set((prev) => ({ ...prev, currentUser: user }));
+          })
+        );
+      })
+    );
+  };
 
-  login(email: string, password: string): Observable<TokenResultVm> {
+  constructor(
+    private readonly securityClient: SecurityClient,
+    private readonly userClient: UserClient,
+    private readonly httpClient: HttpClient
+  ) {
+    super();
+    this.set({ token: '', tokenExpiry: null });
+  }
+
+  login(email: string, password: string): Observable<UserInformationVm> {
     const params = LoginParamsVm.fromJS({ email, password });
-    return this.securityClient.login(params);
+    return this.securityClient.login(params).pipe(this.handleTokenMe());
   }
 
   register(formValue: unknown): Observable<void> {
@@ -34,14 +71,48 @@ export class AuthService {
   }
 
   openResend() {
-    this.$resendOverlay.next(true);
+    this.set((prev) => ({ ...prev, isResendActivate: true }));
   }
 
   closeResend() {
-    this.$resendOverlay.next(false);
+    this.set((prev) => ({ ...prev, isResendActivate: false }));
   }
 
   resendVerification(email: string): Observable<void> {
     return this.securityClient.resendVerificationEmail(email);
+  }
+
+  retrieveTokenOnPageLoad() {
+    return this.securityClient.refreshToken().pipe(
+      catchError((err: ApiException) => {
+        if (err.statusCode === 401) {
+          // do something with 401
+        }
+
+        return throwError(err);
+      }),
+      this.handleTokenMe()
+    );
+  }
+
+  forceLogOut() {
+    // TODO: force log out
+  }
+
+  private _setupRefreshTimer(tokenResult: TokenResultVm) {
+    const { token, expiry } = tokenResult;
+    this.set({ token, tokenExpiry: expiry });
+    const delayInMilli = differenceInMilliseconds(
+      subMinutes(expiry, 1),
+      new Date()
+    );
+
+    if (this.jwtTimerSubscription) {
+      this.jwtTimerSubscription.unsubscribe();
+    }
+
+    this.jwtTimerSubscription = timer(delayInMilli)
+      .pipe(switchMap(() => this.retrieveTokenOnPageLoad()))
+      .subscribe();
   }
 }

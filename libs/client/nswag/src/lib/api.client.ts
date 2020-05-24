@@ -99,6 +99,75 @@ export class UserClient {
         }
         return _observableOf<UserVm[]>(<any>null);
     }
+
+    me(): Observable<UserInformationVm> {
+        let url_ = this.baseUrl + "/users/me";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processMe(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processMe(<any>response_);
+                } catch (e) {
+                    return <Observable<UserInformationVm>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<UserInformationVm>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processMe(response: HttpResponseBase): Observable<UserInformationVm> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UserInformationVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ApiException.fromJS(resultData400);
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ApiException.fromJS(resultData404);
+            return throwException("Not found", status, _responseText, _headers, result404);
+            }));
+        } else if (status === 500) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result500: any = null;
+            let resultData500 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result500 = ApiException.fromJS(resultData500);
+            return throwException("Internal Server Error", status, _responseText, _headers, result500);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<UserInformationVm>(<any>null);
+    }
 }
 
 @Injectable({
@@ -397,6 +466,75 @@ export class SecurityClient {
         }
         return _observableOf<void>(<any>null);
     }
+
+    refreshToken(): Observable<TokenResultVm> {
+        let url_ = this.baseUrl + "/security/refresh-token";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRefreshToken(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRefreshToken(<any>response_);
+                } catch (e) {
+                    return <Observable<TokenResultVm>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TokenResultVm>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processRefreshToken(response: HttpResponseBase): Observable<TokenResultVm> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 201) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result201 = TokenResultVm.fromJS(resultData201);
+            return _observableOf(result201);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ApiException.fromJS(resultData400);
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ApiException.fromJS(resultData404);
+            return throwException("Not found", status, _responseText, _headers, result404);
+            }));
+        } else if (status === 500) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result500: any = null;
+            let resultData500 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result500 = ApiException.fromJS(resultData500);
+            return throwException("Internal Server Error", status, _responseText, _headers, result500);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TokenResultVm>(<any>null);
+    }
 }
 
 export class ApiException {
@@ -439,7 +577,7 @@ export class ApiException {
         data["timestamp"] = this.timestamp !== undefined ? this.timestamp : <any>null;
         data["path"] = this.path !== undefined ? this.path : <any>null;
         data["stack"] = this.stack !== undefined ? this.stack : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -486,7 +624,66 @@ export class UserVm {
         data["lastName"] = this.lastName !== undefined ? this.lastName : <any>null;
         data["roleId"] = this.roleId !== undefined ? this.roleId : <any>null;
         data["roleName"] = this.roleName !== undefined ? this.roleName : <any>null;
-        return data;
+        return data; 
+    }
+}
+
+export class UserInformationVm {
+    createdAt?: Date;
+    updatedAt?: Date;
+    id?: string;
+    isActive!: boolean;
+    email!: string;
+    firstName!: string;
+    lastName!: string;
+    fullName!: string;
+    permissions!: { [key: string]: number; };
+
+    init(_data?: any) {
+        if (_data) {
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>null;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>null;
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.isActive = _data["isActive"] !== undefined ? _data["isActive"] : <any>null;
+            this.email = _data["email"] !== undefined ? _data["email"] : <any>null;
+            this.firstName = _data["firstName"] !== undefined ? _data["firstName"] : <any>null;
+            this.lastName = _data["lastName"] !== undefined ? _data["lastName"] : <any>null;
+            this.fullName = _data["fullName"] !== undefined ? _data["fullName"] : <any>null;
+            if (_data["permissions"]) {
+                this.permissions = {} as any;
+                for (let key in _data["permissions"]) {
+                    if (_data["permissions"].hasOwnProperty(key))
+                        this.permissions![key] = _data["permissions"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any): UserInformationVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserInformationVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>null;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>null;
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["isActive"] = this.isActive !== undefined ? this.isActive : <any>null;
+        data["email"] = this.email !== undefined ? this.email : <any>null;
+        data["firstName"] = this.firstName !== undefined ? this.firstName : <any>null;
+        data["lastName"] = this.lastName !== undefined ? this.lastName : <any>null;
+        data["fullName"] = this.fullName !== undefined ? this.fullName : <any>null;
+        if (this.permissions) {
+            data["permissions"] = {};
+            for (let key in this.permissions) {
+                if (this.permissions.hasOwnProperty(key))
+                    data["permissions"][key] = this.permissions[key] !== undefined ? this.permissions[key] : <any>null;
+            }
+        }
+        return data; 
     }
 }
 
@@ -518,7 +715,7 @@ export class RegisterParamsVm {
         data["password"] = this.password !== undefined ? this.password : <any>null;
         data["firstName"] = this.firstName !== undefined ? this.firstName : <any>null;
         data["lastName"] = this.lastName !== undefined ? this.lastName : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -544,7 +741,7 @@ export class LoginParamsVm {
         data = typeof data === 'object' ? data : {};
         data["email"] = this.email !== undefined ? this.email : <any>null;
         data["password"] = this.password !== undefined ? this.password : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -570,7 +767,7 @@ export class TokenResultVm {
         data = typeof data === 'object' ? data : {};
         data["token"] = this.token !== undefined ? this.token : <any>null;
         data["expiry"] = this.expiry ? this.expiry.toISOString() : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -593,7 +790,7 @@ export class VerifyRegistrationParamsVm {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["token"] = this.token !== undefined ? this.token : <any>null;
-        return data;
+        return data; 
     }
 }
 

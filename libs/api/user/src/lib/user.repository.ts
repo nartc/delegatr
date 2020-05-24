@@ -19,4 +19,15 @@ export class UserRepository extends BaseRepository<User> {
       UserRepository.throwMongoError(e);
     }
   }
+
+  async findByRefreshToken(id: string, refreshToken: string) {
+    try {
+      return await this.findById(id)
+        .where('refreshToken')
+        .equals(refreshToken)
+        .exec();
+    } catch (e) {
+      UserRepository.throwMongoError(e);
+    }
+  }
 }

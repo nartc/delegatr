@@ -1,7 +1,7 @@
 import { AuthService } from '@delegatr/api/auth';
 import { InjectAppConfig, InjectWebConfig } from '@delegatr/api/config';
 import { AppConfig, WebConfig } from '@delegatr/api/types';
-import { UserService } from '@delegatr/api/user';
+import { User, UserService } from '@delegatr/api/user';
 import {
   LoginParamsVm,
   RegisterParamsVm,
@@ -20,6 +20,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { compare } from 'bcrypt';
 import { Queue } from 'bull';
@@ -82,6 +83,10 @@ export class SecurityService {
       throw new NotFoundException(password, 'Wrong credentials');
     }
 
+    return await this.getTokens(user);
+  }
+
+  private async getTokens(user: User): Promise<[TokenResultVm, string]> {
     const [accessTokenResult, refreshToken]: [
       TokenResultVm,
       string
@@ -124,5 +129,28 @@ export class SecurityService {
       verifyUrl: this.getVerifyUrl(token),
     };
     await this.emailQueue.add(EmailJob.VerifyRegistration, emailData);
+  }
+
+  async refreshToken(refreshToken: string): Promise<[TokenResultVm, string]> {
+    if (refreshToken == null) {
+      throw new UnauthorizedException(refreshToken, 'No refresh token');
+    }
+
+    let id: string;
+    try {
+      const payload = await this.authService.verify<{ id: string }>(
+        refreshToken
+      );
+      id = payload.id;
+    } catch (e) {
+      throw new UnauthorizedException(e, 'Error verify refresh token');
+    }
+
+    const user = await this.userService.getUserByRefreshToken(id, refreshToken);
+    if (user == null) {
+      throw new UnauthorizedException(id, 'No user');
+    }
+
+    return await this.getTokens(user);
   }
 }

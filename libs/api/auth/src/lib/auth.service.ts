@@ -6,7 +6,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { genSalt, hash } from 'bcrypt';
 import { AutoMapper, InjectMapper } from 'nestjsx-automapper';
-import { AuthUser } from './auth-user';
+import { AuthUser } from '@delegatr/api/view-models';
 import { JwtPayload } from './jwt-payload';
 
 @Injectable()
