@@ -4,6 +4,7 @@ import { UserInformationVm, UserVm } from '@delegatr/api/view-models';
 import { Injectable } from '@nestjs/common';
 import parse from 'date-fns/parse';
 import { AutoMapper, InjectMapper } from 'nestjsx-automapper';
+import { v4 as uuid } from 'uuid';
 import { User } from './user.model';
 import { UserRepository } from './user.repository';
 
@@ -29,14 +30,14 @@ export class UserService extends BaseService<User> {
     return this.mapper.mapArray(users, UserVm, User);
   }
 
-  async getUserByRefreshToken(id: string, refreshToken: string): Promise<User> {
-    return await this.userRepository.findByRefreshToken(id, refreshToken);
-  }
-
-  async getUserById(id: string): Promise<UserInformationVm> {
-    const user = await this.cacheService.get(`user_${id}`, () =>
+  async getUserById(id: string): Promise<User> {
+    return await this.cacheService.get(`user_${id}`, () =>
       this.userRepository.findById(id).exec()
     );
+  }
+
+  async getUserInformation(id: string): Promise<UserInformationVm> {
+    const user = await this.getUserById(id);
     return this.mapper.map(user, UserInformationVm, User);
   }
 
@@ -55,11 +56,11 @@ export class UserService extends BaseService<User> {
     return this.mapper.map(result, UserVm, User);
   }
 
-  async saveRefreshToken(id: string, token: string) {
+  async updateRefreshTokenId(id: string) {
     await this.userRepository
       .updateBy(
         id,
-        { $set: { refreshToken: token } },
+        { $set: { refreshTokenId: uuid() } },
         { lean: false, autopopulate: false }
       )
       .exec();

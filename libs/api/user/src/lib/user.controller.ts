@@ -33,6 +33,6 @@ export class UserController {
   @ApiOkResponse({ type: UserInformationVm })
   @ApiOperationId()
   async me(@CurrentUser() currentUser: AuthUser): Promise<UserInformationVm> {
-    return await this.userService.getUserById(currentUser.id);
+    return await this.userService.getUserInformation(currentUser.id);
   }
 }

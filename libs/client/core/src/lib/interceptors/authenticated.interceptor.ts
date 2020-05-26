@@ -6,8 +6,9 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { mergeMap, take } from 'rxjs/operators';
+import isAfter from 'date-fns/isAfter';
+import { combineLatest, defer, Observable } from 'rxjs';
+import { mergeMap, switchMap, take } from 'rxjs/operators';
 import { AuthService } from '../services/auth/auth.service';
 
 @Injectable()
@@ -18,9 +19,12 @@ export class AuthenticatedInterceptor implements HttpInterceptor {
     req: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    return this.authService.token$.pipe(
+    return combineLatest([
+      this.authService.token$,
+      this.authService.tokenExpiry$,
+    ]).pipe(
       take(1),
-      mergeMap((token) => {
+      mergeMap(([token, expired]) => {
         if (!token) {
           return next.handle(req);
         }
@@ -28,7 +32,14 @@ export class AuthenticatedInterceptor implements HttpInterceptor {
         const cloned = req.clone({
           headers: req.headers.set('Authorization', `Bearer ${token}`),
         });
-        return next.handle(cloned);
+
+        return defer(() =>
+          isAfter(new Date(), expired)
+            ? this.authService
+                .retrieveTokenOnPageLoad()
+                .pipe(switchMap(() => next.handle(cloned)))
+            : next.handle(cloned)
+        );
       })
     );
   }

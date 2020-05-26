@@ -55,7 +55,7 @@ async function bootstrap() {
     .setVersion('1.0.0')
     .addServer(`${appConfig.domain}/${globalPrefix}`, 'Development API')
     .addBearerAuth()
-    .addCookieAuth('refresh_token')
+    .addCookieAuth('rtok')
     .build();
 
   const swaggerDoc = SwaggerModule.createDocument(app, swaggerDocOptions);

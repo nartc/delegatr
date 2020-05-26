@@ -92,9 +92,8 @@ export class SecurityService {
       string
     ] = await Promise.all([
       this.authService.createAccessToken(user.email),
-      this.authService.createRefreshToken(user.id),
+      this.authService.createRefreshToken(user.id, user.refreshTokenId),
     ]);
-    await this.userService.saveRefreshToken(user.id, refreshToken);
     return [accessTokenResult, refreshToken];
   }
 
@@ -137,20 +136,34 @@ export class SecurityService {
     }
 
     let id: string;
+    let tokenId: string;
     try {
-      const payload = await this.authService.verify<{ id: string }>(
-        refreshToken
-      );
+      const payload = await this.authService.verifyRefreshToken(refreshToken);
       id = payload.id;
+      tokenId = payload.tokenId;
     } catch (e) {
       throw new UnauthorizedException(e, 'Error verify refresh token');
     }
 
-    const user = await this.userService.getUserByRefreshToken(id, refreshToken);
+    const user = await this.userService.getUserById(id);
     if (user == null) {
-      throw new UnauthorizedException(id, 'No user');
+      throw new UnauthorizedException(id, 'User not found');
+    }
+
+    if (user.refreshTokenId !== tokenId) {
+      throw new UnauthorizedException(tokenId, 'Invalid refresh token');
     }
 
     return await this.getTokens(user);
+  }
+
+  async revokeRefreshToken(userId: string) {
+    const user = await this.userService.getUserById(userId);
+
+    if (user == null) {
+      throw new NotFoundException(userId, 'User not found');
+    }
+
+    await this.userService.updateRefreshTokenId(userId);
   }
 }

@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   ApiException,
@@ -30,6 +29,7 @@ interface AuthState {
 export class AuthService extends RxState<AuthState> {
   readonly isResendActivate$ = this.select('isResendActivate');
   readonly token$ = this.select('token');
+  readonly tokenExpiry$ = this.select('tokenExpiry');
   readonly currentUser$ = this.select('currentUser');
 
   private jwtTimerSubscription: Subscription;
@@ -48,8 +48,7 @@ export class AuthService extends RxState<AuthState> {
 
   constructor(
     private readonly securityClient: SecurityClient,
-    private readonly userClient: UserClient,
-    private readonly httpClient: HttpClient
+    private readonly userClient: UserClient
   ) {
     super();
     this.set({ token: '', tokenExpiry: null });
@@ -96,7 +95,7 @@ export class AuthService extends RxState<AuthState> {
   }
 
   forceLogOut() {
-    // TODO: force log out
+    return this.securityClient.logout();
   }
 
   private _setupRefreshTimer(tokenResult: TokenResultVm) {

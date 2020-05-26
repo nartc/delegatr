@@ -1,5 +1,11 @@
-import { ApiErrors, ApiOperationId, Cookie } from '@delegatr/api/common';
 import {
+  ApiErrors,
+  ApiOperationId,
+  Cookie,
+  CurrentUser,
+} from '@delegatr/api/common';
+import {
+  AuthUser,
   LoginParamsVm,
   RegisterParamsVm,
   TokenResultVm,
@@ -15,7 +21,9 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import {
   ApiCookieAuth,
   ApiCreatedResponse,
@@ -58,7 +66,7 @@ export class SecurityController {
       loginParams
     );
     res
-      .cookie('refresh_token', refreshToken, { httpOnly: true })
+      .cookie('rtok', refreshToken, { httpOnly: true })
       .status(HttpStatus.CREATED)
       .json(tokenResult);
   }
@@ -84,6 +92,14 @@ export class SecurityController {
     return await this.securityService.resendVerificationEmail(email);
   }
 
+  @Put('logout')
+  @UseGuards(AuthGuard())
+  @ApiOkResponse()
+  @ApiOperationId()
+  async logout(@CurrentUser() user: AuthUser): Promise<void> {
+    return await this.securityService.revokeRefreshToken(user.id);
+  }
+
   @Post('refresh-token')
   @ApiCreatedResponse({
     type: TokenResultVm,
@@ -97,14 +113,14 @@ export class SecurityController {
   @ApiOperationId()
   @ApiCookieAuth()
   async refreshToken(
-    @Cookie('refresh_token') refreshToken: string,
+    @Cookie('rtok') refreshToken: string,
     @Res() res: Response
   ): Promise<void> {
     const [tokenResult, newToken] = await this.securityService.refreshToken(
       refreshToken
     );
     res
-      .cookie('refresh_token', newToken, { httpOnly: true })
+      .cookie('rtok', newToken, { httpOnly: true })
       .status(HttpStatus.CREATED)
       .json(tokenResult);
   }
