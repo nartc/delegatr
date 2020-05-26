@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@delegatr/client/core';
 import { ApiException } from '@delegatr/client/nswag';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -13,6 +13,7 @@ export class AppComponent implements OnInit {
   constructor(
     private readonly authService: AuthService,
     private readonly router: Router,
+    private readonly route: ActivatedRoute,
     private readonly nzNotificationService: NzNotificationService
   ) {}
 
@@ -24,7 +25,7 @@ export class AppComponent implements OnInit {
             'Authentication Error',
             'Something went wrong. Please re-login'
           );
-          this.router.navigate(['/login']);
+          this.redirectToLogin();
         }
       },
     });
@@ -32,5 +33,17 @@ export class AppComponent implements OnInit {
 
   onResendClick() {
     this.authService.openResend();
+  }
+
+  private redirectToLogin() {
+    let deepestChild = this.route.snapshot.firstChild;
+    while (deepestChild.firstChild != null) {
+      deepestChild = deepestChild.firstChild;
+    }
+
+    if (deepestChild.url.some((seg) => seg.path.includes('login'))) {
+      return;
+    }
+    this.router.navigate(['/login']);
   }
 }

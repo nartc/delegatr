@@ -13,7 +13,7 @@ export class UnauthenticatedGuard implements CanActivate {
 
   canActivate(): Observable<boolean> {
     return this.authService.token$.pipe(
-      map((token) => token == null),
+      map((token) => token == null || token === ''),
       tap((noToken) => {
         if (!noToken) {
           this.router.navigate(['/']);

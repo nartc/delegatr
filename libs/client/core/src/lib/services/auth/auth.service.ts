@@ -13,7 +13,7 @@ import {
 import { RxState } from '@rx-angular/state';
 import differenceInMilliseconds from 'date-fns/differenceInMilliseconds';
 import subMinutes from 'date-fns/subMinutes';
-import { Observable, pipe, Subscription, throwError, timer } from 'rxjs';
+import { EMPTY, Observable, pipe, Subscription, throwError, timer } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 
 interface AuthState {
@@ -40,6 +40,10 @@ export class AuthService extends RxState<AuthState> {
         return this.userClient.me().pipe(
           tap((user) => {
             this.set((prev) => ({ ...prev, currentUser: user }));
+          }),
+          catchError((err: ApiException) => {
+            this.set((prev) => ({ ...prev, currentUser: null }));
+            return EMPTY;
           })
         );
       })
@@ -51,7 +55,6 @@ export class AuthService extends RxState<AuthState> {
     private readonly userClient: UserClient
   ) {
     super();
-    this.set({ token: '', tokenExpiry: null });
   }
 
   login(email: string, password: string): Observable<UserInformationVm> {
@@ -87,7 +90,7 @@ export class AuthService extends RxState<AuthState> {
         if (err.statusCode === 401) {
           // do something with 401
         }
-
+        this.set({ token: '', tokenExpiry: null });
         return throwError(err);
       }),
       this.handleTokenMe()

@@ -19,6 +19,13 @@ export class AuthenticatedInterceptor implements HttpInterceptor {
     req: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
+    if (
+      req.url.includes('/security/login') ||
+      req.url.includes('/security/refresh-token')
+    ) {
+      return next.handle(req);
+    }
+
     return combineLatest([
       this.authService.token$,
       this.authService.tokenExpiry$,

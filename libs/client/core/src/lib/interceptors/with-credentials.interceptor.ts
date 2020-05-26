@@ -15,7 +15,6 @@ export class WithCredentialsInterceptor implements HttpInterceptor {
       const cloned = req.clone({
         withCredentials: true
       });
-      console.log(cloned);
       return next.handle(cloned);
     }
 
