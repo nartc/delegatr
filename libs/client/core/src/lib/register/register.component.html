@@ -1,0 +1,159 @@
+<nz-spin [nzSpinning]="isLoading$ | async">
+  <ng-container *ngIf="formState$ | async as formState">
+    <nz-result
+      *ngIf="formState === 'submitted'; else formReady"
+      nzStatus="success"
+      nzTitle="Registration Successfully"
+      nzSubTitle="Please verify your email"
+    >
+      <div nz-result-extra>
+        <button nz-button nzType="primary" [routerLink]="['/login']">
+          Log In
+        </button>
+        <button nz-button (click)="hideResult()">Back</button>
+      </div>
+    </nz-result>
+    <ng-template #formReady>
+      <nz-card nzTitle="Delegatr">
+        <form
+          nz-form
+          [formGroup]="form"
+          class="register-form"
+          (ngSubmit)="submitForm()"
+        >
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="firstName">
+              First Name
+            </nz-form-label>
+            <nz-form-control
+              [nzSm]="14"
+              [nzXs]="24"
+              nzHasFeedback
+              nzErrorTip="Please fill out your first name"
+            >
+              <input
+                nz-input
+                formControlName="firstName"
+                id="firstName"
+                placeholder="John"
+              />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="lastName">
+              Last Name
+            </nz-form-label>
+            <nz-form-control
+              [nzSm]="14"
+              [nzXs]="24"
+              nzHasFeedback
+              nzErrorTip="Please fill out your last name"
+            >
+              <input
+                nz-input
+                formControlName="lastName"
+                id="lastName"
+                placeholder="Doe"
+              />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">
+              Email
+            </nz-form-label>
+            <nz-form-control
+              [nzSm]="14"
+              [nzXs]="24"
+              nzHasFeedback
+              [nzErrorTip]="emailError"
+            >
+              <input
+                nz-input
+                formControlName="email"
+                id="email"
+                placeholder="jdoe@mail.com"
+              />
+              <ng-template #emailError let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  Please fill out your email
+                </ng-container>
+                <ng-container *ngIf="control.hasError('email')">
+                  Please use a valid email
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="password">
+              Password
+            </nz-form-label>
+            <nz-form-control
+              [nzSm]="14"
+              [nzXs]="24"
+              nzHasFeedback
+              [nzErrorTip]="passwordError"
+            >
+              <input
+                nz-input
+                type="password"
+                formControlName="password"
+                id="password"
+                placeholder="Min 6 characters"
+              />
+              <ng-template #passwordError let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  Please fill out your password
+                </ng-container>
+                <ng-container *ngIf="control.hasError('minlength')">
+                  Please use a longer password
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label
+              [nzSm]="6"
+              [nzXs]="24"
+              nzRequired
+              nzFor="confirmPassword"
+            >
+              Confirm Password
+            </nz-form-label>
+            <nz-form-control
+              [nzSm]="14"
+              [nzXs]="24"
+              nzHasFeedback
+              [nzErrorTip]="confirmPasswordError"
+            >
+              <input
+                nz-input
+                type="password"
+                formControlName="confirmPassword"
+                id="confirmPassword"
+                placeholder="Confirm Password"
+              />
+              <ng-template #confirmPasswordError let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  Please confirm your password
+                </ng-container>
+                <ng-container *ngIf="control.hasError('matchPassword')">
+                  Password does not match
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+
+          <button
+            nz-button
+            class="register-form-button register-form-margin"
+            [nzType]="'primary'"
+            [disabled]="form.invalid"
+          >
+            Register
+          </button>
+          Or <a [routerLink]="['/login']"> login now! </a>
+        </form>
+      </nz-card>
+    </ng-template>
+  </ng-container>
+</nz-spin>

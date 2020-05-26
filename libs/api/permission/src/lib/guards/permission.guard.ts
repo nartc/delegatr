@@ -1,6 +1,6 @@
-import { AuthUser } from '@delegatr/api/auth';
 import { memoize } from '@delegatr/api/common';
-import { CanActivate, ExecutionContext, Logger, mixin } from '@nestjs/common';
+import { AuthUser } from '@delegatr/api/view-models';
+import { CanActivate, ExecutionContext, mixin } from '@nestjs/common';
 import { Constructor } from '@nestjs/common/utils/merge-with-values.util';
 import { Request } from 'express';
 import { PermissionGroups } from '../permission-groups';
@@ -16,20 +16,15 @@ function createPermissionGuard(
   privilege: Privilege
 ): Constructor<CanActivate> {
   class MixinPermissionGuard implements CanActivate {
-    constructor() {
-      if (group == null || privilege == null) {
-        const message =
-          'PermissionGuard cannot be instantiated with null arguments';
-        new Logger('PermissionGuard').error(message);
-        throw new Error(message);
-      }
-    }
-
     canActivate(context: ExecutionContext) {
-      const currentUser = context.switchToHttp().getRequest<Request>()
+      const currentUser = (context.switchToHttp().getRequest<Request>() as any)
         .user as AuthUser;
 
       const hasPermission = () => {
+        if (currentUser.role?.permissions == null) {
+          return false;
+        }
+
         return currentUser.role.permissions.some(
           (permission) =>
             permission.name === group &&
@@ -37,7 +32,7 @@ function createPermissionGuard(
         );
       };
 
-      return currentUser && (currentUser.role.isGlobal || hasPermission());
+      return currentUser && (currentUser.role?.isGlobal || hasPermission());
     }
   }
 

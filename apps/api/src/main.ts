@@ -7,7 +7,7 @@ import { HttpExceptionFilter } from '@delegatr/api/common';
 import {
   appConfiguration,
   arenaConfiguration,
-  redisConfiguration
+  redisConfiguration,
 } from '@delegatr/api/config';
 import { AppConfig, ArenaConfig, RedisConfig } from '@delegatr/api/types';
 import { queueNames } from '@delegatr/background/common';
@@ -15,6 +15,7 @@ import { HttpStatus, Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import compression from 'compression';
+import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { AppModule } from './app/app.module';
 
@@ -22,15 +23,16 @@ const Arena = require('bull-arena');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  const appConfig = app.get<AppConfig>(appConfiguration.KEY);
+  app.enableCors({ credentials: true, origin: appConfig.clientDomain });
 
   const globalPrefix = 'api';
-  const appConfig = app.get<AppConfig>(appConfiguration.KEY);
   const redisConfig = app.get<RedisConfig>(redisConfiguration.KEY);
   const arenaConfig = app.get<ArenaConfig>(arenaConfiguration.KEY);
 
   app.use(compression());
   app.use(helmet());
+  app.use(cookieParser());
 
   const arena = new Arena(
     {
@@ -38,21 +40,22 @@ async function bootstrap() {
         name: queueName,
         hostId: queueName,
         redis: { host: redisConfig.host, port: redisConfig.port },
-        type: 'bull'
-      }))
+        type: 'bull',
+      })),
     },
     arenaConfig
   );
-  const arenaEndpoint = `/${ globalPrefix }/arena`;
+  const arenaEndpoint = `/${globalPrefix}/arena`;
   app.use(arenaEndpoint, arena);
-  Logger.log(`Arena: ${ appConfig.domain }${ arenaEndpoint }`, 'NestApplication');
+  Logger.log(`Arena: ${appConfig.domain}${arenaEndpoint}`, 'NestApplication');
 
   const swaggerDocOptions = new DocumentBuilder()
     .setTitle('Delegatr API')
     .setDescription('API documentation for Delegatr')
     .setVersion('1.0.0')
-    .addServer(`${ appConfig.domain }/${ globalPrefix }`, 'Development API')
+    .addServer(`${appConfig.domain}/${globalPrefix}`, 'Development API')
     .addBearerAuth()
+    .addCookieAuth('rtok')
     .build();
 
   const swaggerDoc = SwaggerModule.createDocument(app, swaggerDocOptions);
@@ -60,10 +63,13 @@ async function bootstrap() {
     swaggerOptions: {
       docExpansion: 'none',
       filter: true,
-      showRequestDuration: true
-    }
+      showRequestDuration: true,
+    },
   });
-  Logger.log(`Swagger Docs enabled: ${ appConfig.domain }/${ globalPrefix }/docs`, 'NestApplication');
+  Logger.log(
+    `Swagger Docs enabled: ${appConfig.domain}/${globalPrefix}/docs`,
+    'NestApplication'
+  );
 
   app.use('/robots.txt', (_, res) => {
     res.send('User-Agent: *\n' + 'Disallow: /');

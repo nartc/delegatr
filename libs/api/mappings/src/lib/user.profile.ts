@@ -1,8 +1,12 @@
-import { AuthUser } from '@delegatr/api/auth';
 import { Permission } from '@delegatr/api/permission';
 import { Role } from '@delegatr/api/role';
 import { User } from '@delegatr/api/user';
-import { RoleVm, UserInformationVm, UserVm } from '@delegatr/api/view-models';
+import {
+  AuthUser,
+  RoleVm,
+  UserInformationVm,
+  UserVm,
+} from '@delegatr/api/view-models';
 import {
   AutoMapper,
   mapFrom,

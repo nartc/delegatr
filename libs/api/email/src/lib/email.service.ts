@@ -15,12 +15,12 @@ export class EmailService {
     mailData: MailDataRequired,
     isMultiple: boolean = false
   ): ReturnType<typeof sgMail.send> {
-    mailData = { ...mailData, templateId };
+    mailData = { ...mailData, templateId, from: 'example@delegatr.com' };
     try {
       return await sgMail.send(mailData, isMultiple);
     } catch (e) {
       throw new InternalServerErrorException(
-        mailData,
+        e.response?.body?.errors || e,
         'Error sending email' + e.message
       );
     }

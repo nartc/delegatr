@@ -88,6 +88,15 @@
     },
     "background-email-job": {
       "tags": []
+    },
+    "client-core": {
+      "tags": []
+    },
+    "client-nswag": {
+      "tags": []
+    },
+    "client-common": {
+      "tags": []
     }
   }
 }

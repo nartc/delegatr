@@ -1,7 +1,18 @@
-<div style="text-align: center;">
-  <h1>Welcome to client!</h1>
-  <img
-    width="450"
-    src="https://raw.githubusercontent.com/nrwl/nx/master/nx-logo.png"
-  />
-</div>
+<nz-layout>
+  <nz-header>
+    <div class="logo"></div>
+<!--        <ul nz-menu nzTheme="dark" nzMode="horizontal">-->
+<!--          <li nz-menu-item>nav 1</li>-->
+<!--          <li nz-menu-item>nav 2</li>-->
+<!--          <li nz-menu-item>nav 3</li>-->
+<!--        </ul>-->
+  </nz-header>
+  <nz-content>
+    <router-outlet></router-outlet>
+  </nz-content>
+  <nz-footer>
+    <p>Ant Design ©2020 Implement By Angular</p>
+    <a nz-button nzType="link" (click)="onResendClick()">Resend Verification</a>
+  </nz-footer>
+</nz-layout>
+<delegatr-resend-verification-overlay></delegatr-resend-verification-overlay>

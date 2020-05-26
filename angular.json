@@ -21,8 +21,19 @@
             "polyfills": "apps/client/src/polyfills.ts",
             "tsConfig": "apps/client/tsconfig.app.json",
             "aot": true,
-            "assets": ["apps/client/src/favicon.ico", "apps/client/src/assets"],
-            "styles": ["apps/client/src/styles.scss"],
+            "assets": [
+              "apps/client/src/favicon.ico",
+              "apps/client/src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
+              }
+            ],
+            "styles": [
+              "apps/client/src/theme.less",
+              "apps/client/src/styles.scss"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -691,6 +702,90 @@
           "options": {
             "jestConfig": "libs/api/availability-pool/jest.config.js",
             "tsConfig": "libs/api/availability-pool/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "client-core": {
+      "projectType": "library",
+      "root": "libs/client/core",
+      "sourceRoot": "libs/client/core/src",
+      "prefix": "delegatr",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/client/core/tsconfig.lib.json",
+              "libs/client/core/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/client/core/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/client/core/jest.config.js",
+            "tsConfig": "libs/client/core/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/client/core/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "client-nswag": {
+      "root": "libs/client/nswag",
+      "sourceRoot": "libs/client/nswag/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/client/nswag/tsconfig.lib.json",
+              "libs/client/nswag/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/client/nswag/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/client/nswag/jest.config.js",
+            "tsConfig": "libs/client/nswag/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "client-common": {
+      "root": "libs/client/common",
+      "sourceRoot": "libs/client/common/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/client/common/tsconfig.lib.json",
+              "libs/client/common/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/client/common/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/client/common/jest.config.js",
+            "tsConfig": "libs/client/common/tsconfig.spec.json",
             "passWithNoTests": true
           }
         }

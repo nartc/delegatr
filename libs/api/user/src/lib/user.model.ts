@@ -2,6 +2,7 @@ import { BaseModel, useMongoosePlugin } from '@delegatr/api/common';
 import { Role } from '@delegatr/api/role';
 import { prop, Ref } from '@typegoose/typegoose';
 import { AutoMap } from 'nestjsx-automapper';
+import { v4 as uuid } from 'uuid';
 
 @useMongoosePlugin()
 export class User extends BaseModel {
@@ -11,7 +12,7 @@ export class User extends BaseModel {
     trim: true,
     minlength: 8,
     maxlength: 100,
-    text: true,
+    index: true,
   })
   @AutoMap()
   email: string;
@@ -23,9 +24,9 @@ export class User extends BaseModel {
   lastName: string;
   @prop({ required: true, minlength: 6 })
   password: string;
-  @prop()
-  refreshToken: string;
-  @prop()
+  @prop({ default: uuid() })
+  refreshTokenId: string;
+  @prop({ default: null })
   verify: Date;
   @prop({ ref: Role, autopopulate: true, default: null })
   @AutoMap(() => Role)

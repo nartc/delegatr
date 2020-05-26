@@ -1,9 +1,10 @@
 import { CacheService } from '@delegatr/api/caching';
 import { BaseService } from '@delegatr/api/common';
-import { UserVm } from '@delegatr/api/view-models';
+import { UserInformationVm, UserVm } from '@delegatr/api/view-models';
 import { Injectable } from '@nestjs/common';
 import parse from 'date-fns/parse';
 import { AutoMapper, InjectMapper } from 'nestjsx-automapper';
+import { v4 as uuid } from 'uuid';
 import { User } from './user.model';
 import { UserRepository } from './user.repository';
 
@@ -29,6 +30,17 @@ export class UserService extends BaseService<User> {
     return this.mapper.mapArray(users, UserVm, User);
   }
 
+  async getUserById(id: string): Promise<User> {
+    return await this.cacheService.get(`user_${id}`, () =>
+      this.userRepository.findById(id).exec()
+    );
+  }
+
+  async getUserInformation(id: string): Promise<UserInformationVm> {
+    const user = await this.getUserById(id);
+    return this.mapper.map(user, UserInformationVm, User);
+  }
+
   async verify(id: string): Promise<UserVm> {
     const now = parse(
       new Date().toLocaleString(),
@@ -44,13 +56,18 @@ export class UserService extends BaseService<User> {
     return this.mapper.map(result, UserVm, User);
   }
 
-  async saveRefreshToken(id: string, token: string) {
+  async updateRefreshTokenId(id: string) {
     await this.userRepository
       .updateBy(
         id,
-        { $set: { refreshToken: token } },
+        { $set: { refreshTokenId: uuid() } },
         { lean: false, autopopulate: false }
       )
       .exec();
+    await this.invalidateUserCache(id);
+  }
+
+  private async invalidateUserCache(id: string) {
+    await this.cacheService.clear(`user_${id}`);
   }
 }

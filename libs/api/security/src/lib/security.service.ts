@@ -1,5 +1,7 @@
 import { AuthService } from '@delegatr/api/auth';
-import { UserService } from '@delegatr/api/user';
+import { InjectAppConfig, InjectWebConfig } from '@delegatr/api/config';
+import { AppConfig, WebConfig } from '@delegatr/api/types';
+import { User, UserService } from '@delegatr/api/user';
 import {
   LoginParamsVm,
   RegisterParamsVm,
@@ -18,6 +20,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { compare } from 'bcrypt';
 import { Queue } from 'bull';
@@ -28,7 +31,9 @@ export class SecurityService {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     @InjectQueue(emailQueueName) private readonly emailQueue: Queue,
-    @InjectQueue(userQueueName) private readonly userQueue: Queue
+    @InjectQueue(userQueueName) private readonly userQueue: Queue,
+    @InjectWebConfig() private readonly webConfig: WebConfig,
+    @InjectAppConfig() private readonly appConfig: AppConfig
   ) {}
 
   async register(params: RegisterParamsVm): Promise<void> {
@@ -49,9 +54,17 @@ export class SecurityService {
     const emailData: VerifyRegistrationEmailData = {
       email: newUser.email,
       firstName: newUser.firstName,
-      verifyUrl: 'url' + verifyToken,
+      verifyUrl: this.getVerifyUrl(verifyToken),
     };
     await this.emailQueue.add(EmailJob.VerifyRegistration, emailData);
+  }
+
+  private getVerifyUrl(verifyToken: string) {
+    return (
+      this.appConfig.clientDomain +
+      this.webConfig.verifyEndpoint +
+      `?token=${verifyToken}`
+    );
   }
 
   async login(params: LoginParamsVm): Promise<[TokenResultVm, string]> {
@@ -70,14 +83,17 @@ export class SecurityService {
       throw new NotFoundException(password, 'Wrong credentials');
     }
 
+    return await this.getTokens(user);
+  }
+
+  private async getTokens(user: User): Promise<[TokenResultVm, string]> {
     const [accessTokenResult, refreshToken]: [
       TokenResultVm,
       string
     ] = await Promise.all([
       this.authService.createAccessToken(user.email),
-      this.authService.createRefreshToken(user.id),
+      this.authService.createRefreshToken(user.id, user.refreshTokenId),
     ]);
-    await this.userService.saveRefreshToken(user.id, refreshToken);
     return [accessTokenResult, refreshToken];
   }
 
@@ -109,8 +125,45 @@ export class SecurityService {
     const emailData: VerifyRegistrationEmailData = {
       email: user.email,
       firstName: user.firstName,
-      verifyUrl: 'url' + token,
+      verifyUrl: this.getVerifyUrl(token),
     };
     await this.emailQueue.add(EmailJob.VerifyRegistration, emailData);
+  }
+
+  async refreshToken(refreshToken: string): Promise<[TokenResultVm, string]> {
+    if (refreshToken == null) {
+      throw new UnauthorizedException(refreshToken, 'No refresh token');
+    }
+
+    let id: string;
+    let tokenId: string;
+    try {
+      const payload = await this.authService.verifyRefreshToken(refreshToken);
+      id = payload.id;
+      tokenId = payload.tokenId;
+    } catch (e) {
+      throw new UnauthorizedException(e, 'Error verify refresh token');
+    }
+
+    const user = await this.userService.getUserById(id);
+    if (user == null) {
+      throw new UnauthorizedException(id, 'User not found');
+    }
+
+    if (user.refreshTokenId !== tokenId) {
+      throw new UnauthorizedException(tokenId, 'Invalid refresh token');
+    }
+
+    return await this.getTokens(user);
+  }
+
+  async revokeRefreshToken(userId: string) {
+    const user = await this.userService.getUserById(userId);
+
+    if (user == null) {
+      throw new NotFoundException(userId, 'User not found');
+    }
+
+    await this.userService.updateRefreshTokenId(userId);
   }
 }
