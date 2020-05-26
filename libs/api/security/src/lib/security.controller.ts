@@ -4,6 +4,8 @@ import {
   Cookie,
   CurrentUser,
 } from '@delegatr/api/common';
+import { InjectAppConfig } from '@delegatr/api/config';
+import { AppConfig } from '@delegatr/api/types';
 import {
   AuthUser,
   LoginParamsVm,
@@ -38,7 +40,10 @@ import { SecurityService } from './security.service';
 @ApiTags('Security')
 @ApiErrors()
 export class SecurityController {
-  constructor(private readonly securityService: SecurityService) {}
+  constructor(
+    private readonly securityService: SecurityService,
+    @InjectAppConfig() private readonly appConfig: AppConfig
+  ) {}
 
   @Post('register')
   @ApiCreatedResponse()
@@ -66,7 +71,10 @@ export class SecurityController {
       loginParams
     );
     res
-      .cookie('rtok', refreshToken, { httpOnly: true })
+      .cookie('rtok', refreshToken, {
+        httpOnly: true,
+        secure: this.appConfig.env !== 'development',
+      })
       .status(HttpStatus.CREATED)
       .json(tokenResult);
   }
@@ -96,8 +104,12 @@ export class SecurityController {
   @UseGuards(AuthGuard())
   @ApiOkResponse()
   @ApiOperationId()
-  async logout(@CurrentUser() user: AuthUser): Promise<void> {
-    return await this.securityService.revokeRefreshToken(user.id);
+  async logout(
+    @CurrentUser() user: AuthUser,
+    @Res() res: Response
+  ): Promise<void> {
+    await this.securityService.revokeRefreshToken(user.id);
+    res.clearCookie('rtok').status(HttpStatus.OK).end();
   }
 
   @Post('refresh-token')
@@ -120,7 +132,10 @@ export class SecurityController {
       refreshToken
     );
     res
-      .cookie('rtok', newToken, { httpOnly: true })
+      .cookie('rtok', newToken, {
+        httpOnly: true,
+        secure: this.appConfig.env !== 'development',
+      })
       .status(HttpStatus.CREATED)
       .json(tokenResult);
   }
