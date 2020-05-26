@@ -1,0 +1,25 @@
+rename disposable to destroyable
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch feature/ng-init
+# Your branch is up to date with 'origin/feature/ng-init'.
+#
+# Changes to be committed:
+#	renamed:    libs/client/common/src/lib/extends/disposable.ts -> libs/client/common/src/lib/extends/destroyable.ts
+#	modified:   libs/client/common/src/lib/extends/index.ts
+#
+# ------------------------ >8 ------------------------
+# Do not modify or remove the line above.
+# Everything below it will be ignored.
+diff --git a/libs/client/common/src/lib/extends/disposable.ts b/libs/client/common/src/lib/extends/destroyable.ts
+similarity index 100%
+rename from libs/client/common/src/lib/extends/disposable.ts
+rename to libs/client/common/src/lib/extends/destroyable.ts
+diff --git a/libs/client/common/src/lib/extends/index.ts b/libs/client/common/src/lib/extends/index.ts
+index e1ac9ba..8782f44 100644
+--- a/libs/client/common/src/lib/extends/index.ts
++++ b/libs/client/common/src/lib/extends/index.ts
+@@ -1 +1 @@
+-export * from './disposable'
++export * from './destroyable'

@@ -59,7 +59,7 @@ export class RegisterComponent
   }
 
   submitForm() {
-    this.set('loading', () => false);
+    this.set('loading', () => true);
     this.authService
       .register(this.form.value)
       .pipe(
