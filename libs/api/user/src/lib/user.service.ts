@@ -64,5 +64,10 @@ export class UserService extends BaseService<User> {
         { lean: false, autopopulate: false }
       )
       .exec();
+    await this.invalidateUserCache(id);
+  }
+
+  private async invalidateUserCache(id: string) {
+    await this.cacheService.clear(`user_${id}`);
   }
 }
