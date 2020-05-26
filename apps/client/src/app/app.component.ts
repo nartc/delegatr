@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { getDeepestChildSnapshot } from '@delegatr/client/common';
 import { AuthService } from '@delegatr/client/core';
 import { ApiException } from '@delegatr/client/nswag';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -36,14 +37,12 @@ export class AppComponent implements OnInit {
   }
 
   private redirectToLogin() {
-    let deepestChild = this.route.snapshot.firstChild;
-    while (deepestChild.firstChild != null) {
-      deepestChild = deepestChild.firstChild;
-    }
+    const deepestChild = getDeepestChildSnapshot(this.route.snapshot);
 
     if (deepestChild.url.some((seg) => seg.path.includes('login'))) {
       return;
     }
+
     this.router.navigate(['/login']);
   }
 }
