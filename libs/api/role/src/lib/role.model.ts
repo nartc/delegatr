@@ -1,6 +1,6 @@
 import { BaseModel, useMongoosePlugin } from '@delegatr/api/common';
 import { Permission } from '@delegatr/api/permission';
-import { arrayProp, prop } from '@typegoose/typegoose';
+import { prop } from '@typegoose/typegoose';
 import { AutoMap } from 'nestjsx-automapper';
 
 @useMongoosePlugin()
@@ -30,7 +30,7 @@ export class Role extends BaseModel {
   @prop({ required: true, maxlength: 255, minlength: 6 })
   @AutoMap()
   note: string;
-  @arrayProp({ items: Permission, default: [] })
+  @prop({ items: Permission, default: [] })
   @AutoMap(() => Permission)
   permissions: Permission[];
 }
