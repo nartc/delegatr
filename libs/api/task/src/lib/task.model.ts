@@ -1,8 +1,7 @@
-import { BaseModel, useMongoosePlugin } from '@delegatr/api/common';
-import { prop, Ref } from '@typegoose/typegoose';
+import { BaseModel, Status, useMongoosePlugin } from '@delegatr/api/common';
+import { prop } from '@typegoose/typegoose';
 import { AutoMap } from 'nestjsx-automapper';
-import { TaskPriority } from './task-priority.enum'
-import { Status} from '@delegatr/api/common';
+import { TaskPriority } from './task-priority.enum';
 
 @useMongoosePlugin()
 export class Task extends BaseModel {
@@ -16,19 +15,20 @@ export class Task extends BaseModel {
   @prop({
     required: true,
     minlength: 1,
-    text: true
+    text: true,
   })
   @AutoMap()
   desc: string;
   @prop({
     required: true,
-    minlength: 1
+    minlength: 1,
   })
   @AutoMap()
   timeFrameId: string;
   @prop({
-    requried: true,
-    enum: TaskPriority
+    required: true,
+    enum: TaskPriority,
+    type: Number,
   })
   @AutoMap()
   priority: TaskPriority;
@@ -39,10 +39,9 @@ export class Task extends BaseModel {
   assignmentsId: string;
   @prop({
     required: true,
-    enum: Status
+    enum: Status,
+    type: Number
   })
   @AutoMap()
-  status: Status
-
-
+  status: Status;
 }

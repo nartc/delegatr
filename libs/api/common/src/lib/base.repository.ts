@@ -3,11 +3,12 @@ import { InternalServerErrorException } from '@nestjs/common';
 import { DocumentType } from '@typegoose/typegoose';
 import { MongoError } from 'mongodb';
 import {
+  CreateQuery,
   DocumentQuery,
   FilterQuery,
   Query,
   Types,
-  UpdateQuery,
+  UpdateQuery
 } from 'mongoose';
 import { BaseModel } from './base.model';
 
@@ -80,7 +81,7 @@ export abstract class BaseRepository<T extends BaseModel> {
       .setOptions(this.getQueryOptions(options));
   }
 
-  async create(item: T): Promise<DocumentType<T>> {
+  async create(item: CreateQuery<T>): Promise<DocumentType<T>> {
     try {
       return await this.model.create(item);
     } catch (e) {

@@ -5,6 +5,7 @@ import { ApiEmailModule } from '@delegatr/api/email';
 import '@delegatr/api/mappings';
 import { ApiRoleModule } from '@delegatr/api/role';
 import { ApiSecurityModule } from '@delegatr/api/security';
+import { ApiTaskModule } from '@delegatr/api/task';
 import { DbConfig } from '@delegatr/api/types';
 import { ApiUserModule } from '@delegatr/api/user';
 import { BackgroundEmailJobModule } from '@delegatr/background/email-job';
@@ -25,8 +26,8 @@ import { AutomapperModule } from 'nestjsx-automapper';
         useFindAndModify: false,
         useNewUrlParser: true,
         useCreateIndex: true,
-        useUnifiedTopology: true
-      })
+        useUnifiedTopology: true,
+      }),
     }),
     AutomapperModule.withMapper(),
     ApiConfigModule,
@@ -36,10 +37,10 @@ import { AutomapperModule } from 'nestjsx-automapper';
     ApiRoleModule,
     ApiUserModule,
     ApiSecurityModule,
+    ApiTaskModule,
     BackgroundUserJobModule,
     BackgroundRoleJobModule,
-    BackgroundEmailJobModule
-  ]
+    BackgroundEmailJobModule,
+  ],
 })
-export class AppModule {
-}
+export class AppModule {}

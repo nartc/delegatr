@@ -1,6 +1,6 @@
+import { BaseService } from '@delegatr/api/common';
 import { Injectable } from '@nestjs/common';
 import { AutoMapper, InjectMapper } from 'nestjsx-automapper';
-import { BaseService } from '../../../common/src/lib/base.service';
 import { Task } from './task.model';
 import { TaskRepository } from './task.repository';
 
@@ -13,7 +13,7 @@ export class TaskService extends BaseService<Task> {
     super(taskRepository);
   }
 
-  async findTask(taskId): Promise<Task> {
+  async findTaskById(taskId: string): Promise<Task> {
     return await this.taskRepository.findTask(taskId);
   }
 }

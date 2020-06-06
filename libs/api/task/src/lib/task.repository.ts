@@ -12,12 +12,11 @@ export class TaskRepository extends BaseRepository<Task> {
     super(taskModel);
   }
 
-  async findTask(taskId: string) {
+  async findTask(taskId: string): Promise<Task> {
     try {
       return await this.findOne().where('id').equals(taskId).exec();
     } catch (e) {
       TaskRepository.throwMongoError(e);
     }
   }
-
 }
