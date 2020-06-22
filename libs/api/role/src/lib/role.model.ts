@@ -30,7 +30,7 @@ export class Role extends BaseModel {
   @prop({ required: true, maxlength: 255, minlength: 6 })
   @AutoMap()
   note: string;
-  @prop({ items: Permission, default: [] })
+  @prop({ type: () => Permission, default: [] })
   @AutoMap(() => Permission)
   permissions: Permission[];
 }
